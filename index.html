@@ -1,0 +1,3005 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuminaStudio & Tech - Fotografi, Editing & Pembuatan WebApp</title>
+  
+  <!-- Favicon & PWA Icons (Dynamic via Data URI) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220%22 width=%2232%22 height=%2232%22><text y=%2224%22 font-size=%2224%22>⚡</text></svg>">
+  
+  <!-- Web App Manifest (Embedded Data URI) -->
+  <link rel="manifest" href="data:application/manifest+json,%7B%22name%22%3A%22LuminaStudio%20%26%20Tech%22%2C%22short_name%22%3A%22Lumina%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230D131A%22%2C%22theme_color%22%3A%22%2310B981%22%7D">
+
+  <!-- Tailwind CSS & Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              500: '#10b981',
+              600: '#059669',
+              emerald: '#00D287',
+              dark: '#0D131A',
+              cardDark: '#131C26'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Custom Scrollbar & Aesthetics */
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #0D131A;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #1e293b;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #10b981;
+    }
+    .cms-table-container {
+      max-height: calc(100vh - 280px);
+    }
+
+    /* Keyframes & Animations */
+    @keyframes floatSlow {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(0.8deg); }
+    }
+    @keyframes floatReverse {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(8px); }
+    }
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.35; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.08); }
+    }
+    @keyframes shimmerMove {
+      0% { transform: translateX(-150%); }
+      100% { transform: translateX(200%); }
+    }
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    .animate-float-slow {
+      animation: floatSlow 6s ease-in-out infinite;
+    }
+    .animate-float-reverse {
+      animation: floatReverse 5s ease-in-out infinite;
+    }
+    .animate-pulse-glow {
+      animation: pulseGlow 7s ease-in-out infinite;
+    }
+    .typewriter-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 1.05em;
+      vertical-align: -0.1em;
+      background-color: #10b981;
+      margin-left: 3px;
+      animation: cursorBlink 0.9s infinite;
+    }
+
+    /* Shimmer light sweep on image hover */
+    .shimmer-card {
+      position: relative;
+      overflow: hidden;
+    }
+    .shimmer-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
+      transform: skewX(-20deg) translateX(-180%);
+      pointer-events: none;
+      transition: none;
+    }
+    .shimmer-card:hover::after {
+      animation: shimmerMove 1.1s ease-out;
+    }
+
+    /* Scroll Reveal Transition Utility */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: opacity, transform;
+    }
+    .reveal-on-scroll.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body class="bg-[#F8FAFC] text-slate-800 font-sans antialiased overflow-x-hidden selection:bg-emerald-500 selection:text-white">
+
+  <!-- ==================== HEADER / NAVBAR ==================== -->
+  <header class="sticky top-0 z-40 bg-[#0D131A]/90 backdrop-blur-md border-b border-slate-800/80 transition-all">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo -->
+        <a href="#" class="flex items-center space-x-3 group">
+          <div id="navBrandLogoContainer" class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center text-slate-950 font-extrabold text-xl shadow-lg group-hover:scale-105 transition-transform overflow-hidden">
+            <span id="navBrandLogoEmoji">⚡</span>
+            <img id="navBrandLogoImg" src="" alt="Logo" class="w-full h-full object-cover hidden">
+          </div>
+          <div>
+            <span id="navBrandTitle" class="text-xl font-bold tracking-tight text-white flex items-center gap-1.5">
+              Lumina<span class="text-emerald-400">Studio</span>
+            </span>
+            <span id="navBrandTagline" class="text-[10px] tracking-widest uppercase block text-slate-400 font-semibold">Creative & Tech Agency</span>
+          </div>
+        </a>
+
+        <!-- Desktop Navigation Links -->
+        <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+          <a href="#services" class="hover:text-emerald-400 transition-colors">Layanan</a>
+          <a href="#portfolio" class="hover:text-emerald-400 transition-colors">Portofolio</a>
+          <a href="#pricing" class="hover:text-emerald-400 transition-colors">Kalkulator Biaya</a>
+          <a href="#reviews" class="hover:text-emerald-400 transition-colors">Testimoni</a>
+          <a href="#cek-order" class="hover:text-emerald-400 transition-colors">Cek Status Proyek</a>
+        </nav>
+
+        <!-- Right Action Button & Admin Login Trigger -->
+        <div class="flex items-center space-x-3">
+          <button id="btnAdminModalOpen" class="inline-flex items-center gap-2 bg-slate-900 border border-slate-700/80 hover:border-emerald-500 text-slate-200 hover:text-emerald-400 px-3.5 py-2 rounded-xl text-xs font-semibold transition" title="Buka Panel CMS">
+            <i class="ph ph-squares-four text-base text-emerald-400"></i>
+            <span class="hidden sm:inline">Panel Admin CMS</span>
+          </button>
+          <a href="#booking" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 px-4 py-2.5 rounded-xl font-semibold text-sm transition-all shadow-lg hover:shadow-emerald-500/20 active:scale-95">
+            <span>Booking Layanan</span>
+            <i class="ph ph-arrow-up-right font-bold"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== HERO SECTION (DARK ELEGANT) ==================== -->
+  <section class="relative bg-[#0D131A] text-white pt-12 pb-24 lg:pt-16 lg:pb-32 overflow-hidden border-b border-slate-800">
+    <!-- Background Accents / Glow Elements -->
+    <div class="absolute -top-32 -left-32 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
+    <div class="absolute top-1/2 -right-40 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl pointer-events-none animate-pulse-glow" style="animation-delay: -3s;"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        
+        <!-- Left Hero Content -->
+        <div class="lg:col-span-7 space-y-7 text-center lg:text-left">
+          <div class="inline-flex items-center gap-2 bg-slate-900 border border-slate-800 text-emerald-400 px-4 py-2 rounded-full text-xs font-semibold tracking-wide hover:border-emerald-500/50 transition">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            3 Pilar Kreatif: Foto • Retouch • Fullstack Web
+          </div>
+
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.15]">
+            Ekspresikan Brand Anda Lewat <br class="hidden sm:inline">
+            <span id="animatedHeroText" class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Visual Memukau</span><span class="typewriter-cursor"></span>
+          </h1>
+
+          <p class="text-slate-400 text-base sm:text-lg max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+            Dari sesi pemotretan profesional kelas tinggi, grading warna sinematik, hingga rancang bangun aplikasi web interaktif responsif berbasis database cloud untuk bisnis Anda.
+          </p>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+            <a href="#booking" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-emerald-500 text-slate-950 font-bold hover:bg-emerald-400 transition shadow-lg shadow-emerald-500/20 text-center flex items-center justify-center gap-2 hover:-translate-y-0.5 active:scale-95 duration-200">
+              <span>Mulai Proyek Sekarang</span>
+              <i class="ph ph-arrow-right font-bold"></i>
+            </a>
+            <a href="#portfolio" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-200 font-semibold transition text-center flex items-center justify-center gap-2 hover:-translate-y-0.5 duration-200">
+              <i class="ph ph-play-circle text-lg text-emerald-400"></i>
+              <span>Lihat Portofolio</span>
+            </a>
+          </div>
+
+          <!-- Trust Badges & Metrics -->
+          <div class="pt-8 border-t border-slate-800/80 grid grid-cols-3 gap-4 text-center lg:text-left">
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-white">450+</div>
+              <div class="text-xs text-slate-400 font-medium">Sesi Foto & Event</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-white">1.2k+</div>
+              <div class="text-xs text-slate-400 font-medium">Editing & Presets</div>
+            </div>
+            <div>
+              <div class="text-2xl sm:text-3xl font-extrabold text-emerald-400">99.8%</div>
+              <div class="text-xs text-slate-400 font-medium">Klien Puas</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right Hero Visual Card -->
+        <div class="lg:col-span-5 relative flex justify-center">
+          <div class="relative w-full max-w-md animate-float-slow">
+            <div class="absolute inset-0 bg-gradient-to-tr from-emerald-600 to-teal-500 rounded-3xl transform rotate-3 scale-95 opacity-90 blur-sm"></div>
+            
+            <div class="relative bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl p-6 shimmer-card">
+              <div id="heroImageContainer" class="relative rounded-2xl overflow-hidden bg-slate-950 aspect-[4/5] border border-slate-800 group cursor-pointer" onclick="openImageLightbox(document.getElementById('heroShowcaseImg').src, document.getElementById('heroCardTitle').innerText)">
+                <img 
+                  id="heroShowcaseImg"
+                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" 
+                  alt="Showcase Visual Studio"
+                  class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out"
+                >
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+                <div class="absolute top-3 right-3 bg-slate-900/70 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                  <i class="ph ph-magnifying-glass-plus"></i>
+                  <span>Perbesar</span>
+                </div>
+                
+                <div class="absolute bottom-4 left-4 right-4 bg-slate-900/90 backdrop-blur-md border border-slate-700/60 p-3.5 rounded-xl flex items-center justify-between">
+                  <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl">
+                      <i class="ph ph-camera"></i>
+                    </div>
+                    <div>
+                      <div id="heroCardTitle" class="text-xs font-bold text-white">4K Studio Capture</div>
+                      <div id="heroCardSubtitle" class="text-[11px] text-slate-400">Sony Alpha Master Sensor</div>
+                    </div>
+                  </div>
+                  <span id="heroCardBadge" class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full">Pro</span>
+                </div>
+              </div>
+
+              <!-- Floating Micro-badge -->
+              <div class="absolute -bottom-3 -left-3 bg-slate-950/95 border border-emerald-500/50 shadow-xl px-3.5 py-2 rounded-xl flex items-center gap-2 animate-float-reverse">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
+                <span id="heroFloatingBadge" class="text-[11px] font-bold text-emerald-300">Live Production Ready</span>
+              </div>
+
+              <div class="mt-4 pt-4 border-t border-slate-800 grid grid-cols-2 gap-3 text-xs text-slate-300">
+                <div class="flex items-center gap-2">
+                  <i class="ph ph-check-circle text-emerald-400 text-base"></i>
+                  <span>Color Grading Log</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <i class="ph ph-check-circle text-emerald-400 text-base"></i>
+                  <span>Cloud PWA WebApps</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== INTERACTIVE SERVICES SECTION ==================== -->
+  <section id="services" class="py-20 bg-slate-50 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        <span class="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1.5 rounded-full uppercase tracking-wider mb-3">
+          <i class="ph ph-squares-four"></i> Pilar Spesialisasi Kami
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
+          Solusi Terpadu <span class="text-emerald-600">Visual & Teknologi</span>
+        </h2>
+        <p class="text-slate-600 mt-3 text-sm sm:text-base">
+          Pilih kategori layanan di bawah ini untuk melihat detail fitur, alur kerja, dan keunggulan eksklusif yang kami sediakan untuk Anda.
+        </p>
+
+        <!-- Service Switcher Tabs -->
+        <div class="inline-flex p-1.5 bg-slate-200/80 rounded-2xl mt-8 shadow-inner border border-slate-300/60 max-w-full overflow-x-auto">
+          <button onclick="switchServiceTab('photo')" id="tabBtn-photo" class="service-tab-btn active px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition flex items-center gap-2 bg-white text-slate-900 shadow-sm">
+            <i class="ph ph-camera text-base text-emerald-600"></i>
+            <span>Fotografi & Studio</span>
+          </button>
+          <button onclick="switchServiceTab('editing')" id="tabBtn-editing" class="service-tab-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-2 text-slate-600 hover:text-slate-900">
+            <i class="ph ph-sliders text-base text-emerald-600"></i>
+            <span>Photo & Video Editing</span>
+          </button>
+          <button onclick="switchServiceTab('webapp')" id="tabBtn-webapp" class="service-tab-btn px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition flex items-center gap-2 text-slate-600 hover:text-slate-900">
+            <i class="ph ph-browsers text-base text-emerald-600"></i>
+            <span>Pembuatan WebApps</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Tab Content 1: FOTOGRAFI -->
+      <div id="tabContent-photo" class="service-content-panel block">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm reveal-on-scroll">
+          <div class="lg:col-span-7 space-y-6">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+              <i class="ph ph-camera"></i>
+            </div>
+            <h3 id="svcPhotoTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900">Layanan Fotografi Komersial & Personal</h3>
+            <p id="svcPhotoDesc" class="text-slate-600 leading-relaxed text-sm sm:text-base">
+              Kami menghidupkan visual brand Anda melalui pencahayaan sinematik dan komposisi presisi. Cocok untuk katalog produk, potret wisuda, profil korporat, dokumentasi wedding, dan event.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Kamera Sony Alpha Full-Frame & Lensa Master G</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Tata Cahaya Godox Studio Lighting Lengkap</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Bebas Konsultasi Moodboard & Pengarahan Pose</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Semua File Master RAW & JPEG Beresolusi Tinggi</div>
+              </div>
+            </div>
+            <div class="pt-4 flex flex-wrap gap-4 items-center">
+              <a href="#booking" onclick="preselectService('Fotografi')" class="px-6 py-3 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition flex items-center gap-2 hover:-translate-y-0.5">
+                <span>Booking Jadwal Foto</span>
+                <i class="ph ph-calendar-plus text-base"></i>
+              </a>
+              <span class="text-xs text-slate-500 font-medium">Mulai dari <strong id="svcPhotoPriceText" class="text-slate-900">Rp 450.000</strong> / sesi</span>
+            </div>
+          </div>
+          <div class="lg:col-span-5">
+            <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md aspect-video lg:aspect-[4/3] group shimmer-card cursor-pointer" onclick="openImageLightbox(document.getElementById('svcPhotoImg').src, document.getElementById('svcPhotoTitle').innerText)">
+              <img id="svcPhotoImg" src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=800&q=80" alt="Fotografi Studio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content 2: EDITING & RETOUCHING -->
+      <div id="tabContent-editing" class="service-content-panel hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm reveal-on-scroll">
+          <div class="lg:col-span-7 space-y-6">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+              <i class="ph ph-sliders"></i>
+            </div>
+            <h3 id="svcEditingTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900">High-End Retouching & Color Grading</h3>
+            <p id="svcEditingDesc" class="text-slate-600 leading-relaxed text-sm sm:text-base">
+              Punya materi foto atau video mentah yang butuh sentuhan estetik? Kami menyediakan layanan retouch tekstur kulit alami (Frequency Separation), color grading filmik, dan editing reels/tiktok viral.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Frequency Separation & Skin Tone Retouch</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Color Grading DaVinci Resolve & Lightroom Presets</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Manipulasi Latar Belakang & Hapus Objek Gangguan</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Garansi Revisi Hingga Cocok Sesuai Referensi</div>
+              </div>
+            </div>
+            <div class="pt-4 flex flex-wrap gap-4 items-center">
+              <a href="#booking" onclick="preselectService('Editing')" class="px-6 py-3 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition flex items-center gap-2 hover:-translate-y-0.5">
+                <span>Kirim Bahan Edit</span>
+                <i class="ph ph-upload-simple text-base"></i>
+              </a>
+              <span class="text-xs text-slate-500 font-medium">Mulai dari <strong id="svcEditingPriceText" class="text-slate-900">Rp 25.000</strong> / foto</span>
+            </div>
+          </div>
+          <div class="lg:col-span-5">
+            <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md aspect-video lg:aspect-[4/3] group shimmer-card cursor-pointer" onclick="openImageLightbox(document.getElementById('svcEditingImg').src, document.getElementById('svcEditingTitle').innerText)">
+              <img id="svcEditingImg" src="https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80" alt="Video & Photo Editing" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content 3: WEBAPPS DEVELOPMENT -->
+      <div id="tabContent-webapp" class="service-content-panel hidden">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-sm reveal-on-scroll">
+          <div class="lg:col-span-7 space-y-6">
+            <div class="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl font-bold">
+              <i class="ph ph-browsers"></i>
+            </div>
+            <h3 id="svcWebappTitle" class="text-2xl sm:text-3xl font-extrabold text-slate-900">Pembuatan Aplikasi Web & PWA Custom</h3>
+            <p id="svcWebappDesc" class="text-slate-600 leading-relaxed text-sm sm:text-base">
+              Bangun sistem bisnis online yang cepat, interaktif, dan tanpa langganan server mahal. Dari sistem kasir (POS), dashboard manajemen stok, portal klien, hingga integrasi database real-time.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Progressive Web App (Bisa diinstall di HP/PC)</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Database Cloud Real-Time (Serverless & Cepat)</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">Format Single-File (Bisa Disematkan ke Blogger/Hosting)</div>
+              </div>
+              <div class="flex items-start gap-3">
+                <i class="ph ph-check-circle text-emerald-600 text-xl flex-shrink-0 mt-0.5"></i>
+                <div class="text-xs sm:text-sm text-slate-700 font-medium">UI/UX Modern ala Fintech + Sistem Hak Akses Multi-Level</div>
+              </div>
+            </div>
+            <div class="pt-4 flex flex-wrap gap-4 items-center">
+              <a href="#booking" onclick="preselectService('WebApp')" class="px-6 py-3 rounded-xl bg-slate-900 text-white font-bold text-sm hover:bg-slate-800 transition flex items-center gap-2 hover:-translate-y-0.5">
+                <span>Konsultasi Pembuatan WebApp</span>
+                <i class="ph ph-code text-base"></i>
+              </a>
+              <span class="text-xs text-slate-500 font-medium">Mulai dari <strong id="svcWebappPriceText" class="text-slate-900">Rp 750.000</strong> / aplikasi</span>
+            </div>
+          </div>
+          <div class="lg:col-span-5">
+            <div class="rounded-2xl overflow-hidden border border-slate-200 shadow-md aspect-video lg:aspect-[4/3] group shimmer-card cursor-pointer" onclick="openImageLightbox(document.getElementById('svcWebappImg').src, document.getElementById('svcWebappTitle').innerText)">
+              <img id="svcWebappImg" src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Web Development" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==================== BENTO FEATURES GRID ==================== -->
+  <section class="py-16 bg-white border-y border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-14 reveal-on-scroll">
+        <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Mengapa Memilih Lumina?</h2>
+        <p class="text-slate-500 text-sm mt-2">Kombinasi artistik seni visual dan keahlian rekayasa software teruji.</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-emerald-500/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 reveal-on-scroll">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-2xl font-bold mb-6">
+            <i class="ph ph-lightning"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">Pengerjaan Super Cepat</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Preview hasil foto & editing siap dalam 24 jam. Proyek aplikasi webapp tahap awal selesai dalam 3-5 hari kerja.
+          </p>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-xl relative overflow-hidden transition-all duration-300 hover:-translate-y-1.5 reveal-on-scroll" style="transition-delay: 150ms;">
+          <div class="absolute -right-8 -bottom-8 w-32 h-32 bg-emerald-500/20 rounded-full blur-xl pointer-events-none animate-pulse-glow"></div>
+          <div class="w-12 h-12 rounded-2xl bg-emerald-400 text-slate-950 flex items-center justify-center text-2xl font-bold mb-6">
+            <i class="ph ph-shield-check"></i>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-2">Cloud Database & PWA</h3>
+          <p class="text-sm text-slate-300 leading-relaxed">
+            Aplikasi web yang kami bangun terintegrasi langsung dengan database online real-time, tanpa perlu pusing sewa server.
+          </p>
+        </div>
+
+        <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200/80 hover:border-emerald-500/50 hover:shadow-lg transition-all duration-300 hover:-translate-y-1.5 reveal-on-scroll" style="transition-delay: 300ms;">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500 text-white flex items-center justify-center text-2xl font-bold mb-6">
+            <i class="ph ph-hand-heart"></i>
+          </div>
+          <h3 class="text-lg font-bold text-slate-900 mb-2">Garansi Kepuasan 100%</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            Revisi desain, penyesuaian filter foto, dan perbaikan bug kode gratis hingga seluruh ekspektasi Anda terpenuhi.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PORTFOLIO SHOWCASE SECTION ==================== -->
+  <section id="portfolio" class="py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+        <div>
+          <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Katalog Karya</span>
+          <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Portofolio Terkini</h2>
+        </div>
+
+        <!-- Portfolio Filter Pills -->
+        <div class="flex flex-wrap gap-2 text-xs font-semibold">
+          <button onclick="filterPortfolio('all')" class="port-filter active px-4 py-2 rounded-xl bg-slate-900 text-white transition">Semua</button>
+          <button onclick="filterPortfolio('photo')" class="port-filter px-4 py-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition">Fotografi</button>
+          <button onclick="filterPortfolio('editing')" class="port-filter px-4 py-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition">Editing</button>
+          <button onclick="filterPortfolio('webapp')" class="port-filter px-4 py-2 rounded-xl bg-white text-slate-600 border border-slate-200 hover:bg-slate-100 transition">Aplikasi Web</button>
+        </div>
+      </div>
+
+      <!-- Portfolio Dynamic Grid -->
+      <div id="portfolioGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Rendered dynamically from CMS state -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== INTERACTIVE PRICE ESTIMATOR / CALCULATOR ==================== -->
+  <section id="pricing" class="py-20 bg-white border-t border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-gradient-to-br from-slate-900 to-[#131C26] rounded-3xl p-8 sm:p-12 text-white border border-slate-800 shadow-2xl relative overflow-hidden">
+        
+        <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+          <div class="lg:col-span-7 space-y-6">
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20">
+              Kalkulator Transparan
+            </span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold leading-tight">
+              Hitung Estimasi Biaya Proyek Sesuai Kebutuhan Anda
+            </h2>
+            <p class="text-slate-400 text-xs sm:text-sm">
+              Tentukan kombinasi layanan untuk mendapatkan estimasi total harga investasi yang hemat dan transparan.
+            </p>
+
+            <div class="space-y-4 pt-2">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-2">Pilih Layanan Utama:</label>
+                <select id="calcService" onchange="calculatePrice()" class="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-emerald-500">
+                  <option value="photo_studio">Sesi Foto Studio (Rp 450.000 / 2 Jam)</option>
+                  <option value="photo_event">Dokumentasi Event / Acara (Rp 1.200.000 / Hari)</option>
+                  <option value="edit_retouch">High-End Retouch (Rp 25.000 / Foto)</option>
+                  <option value="webapp_landing">Web Landing Page + Cloud PWA (Rp 750.000)</option>
+                  <option value="webapp_system">Aplikasi Sistem Manajemen + POS Database (Rp 2.500.000)</option>
+                </select>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-2">Kuantitas / Durasi Unit:</label>
+                  <input type="number" id="calcQty" value="1" min="1" oninput="calculatePrice()" class="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-emerald-500">
+                </div>
+                <div>
+                  <label class="block text-xs font-semibold text-slate-300 mb-2">Layanan Tambahan:</label>
+                  <div class="flex items-center gap-2 pt-2">
+                    <input type="checkbox" id="calcFast" onchange="calculatePrice()" class="rounded text-emerald-500 focus:ring-0 w-4 h-4 bg-slate-800 border-slate-700">
+                    <span class="text-xs text-slate-300">Pengerjaan Kilat Express (+25%)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="lg:col-span-5">
+            <div class="bg-slate-950/80 backdrop-blur-md border border-slate-700/80 p-6 rounded-2xl text-center space-y-4">
+              <span class="text-xs text-slate-400 uppercase tracking-widest font-semibold">Estimasi Total Investasi</span>
+              <div id="calcDisplayTotal" class="text-3xl sm:text-4xl font-extrabold text-emerald-400">Rp 450.000</div>
+              <p class="text-[11px] text-slate-400">Harga final dapat disesuaikan setelah konsultasi detail materi & kebutuhan teknis.</p>
+              <button onclick="useCalculatedBooking()" class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition">
+                Terapkan ke Form Booking
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== BOOKING & ORDER FORM ==================== -->
+  <section id="booking" class="py-20 bg-slate-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center max-w-2xl mx-auto mb-10">
+        <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Konsultasi & Reservasi</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Form Pemesanan Layanan</h2>
+        <p class="text-slate-600 text-sm mt-2">Isi formulir berikut. Data pesanan Anda akan tersimpan otomatis dan tim kami segera menghubungi via WhatsApp.</p>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 sm:p-10">
+        <form id="orderForm" onsubmit="handleOrderSubmit(event)" class="space-y-6">
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Nama Lengkap / Instansi *</label>
+              <input type="text" id="orderClientName" required placeholder="Contoh: Rian Pratama" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Nomor WhatsApp Aktif *</label>
+              <input type="tel" id="orderPhone" required placeholder="Contoh: 081234567890" class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Kategori Layanan *</label>
+              <select id="orderCategory" required class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm bg-white focus:outline-none focus:border-emerald-500">
+                <option value="Fotografi">Fotografi & Sesi Studio</option>
+                <option value="Editing">Photo Retouch & Video Editing</option>
+                <option value="WebApp">Pembuatan Aplikasi Web / PWA</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Target Tanggal / Jadwal *</label>
+              <input type="date" id="orderTargetDate" required class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Catatan Kebutuhan & Konsep Proyek</label>
+            <textarea id="orderNotes" rows="3" placeholder="Jelaskan konsep foto, jumlah lembar edit, atau alur aplikasi web yang ingin Anda buat..." class="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500"></textarea>
+          </div>
+
+          <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-slate-100">
+            <div class="text-xs text-slate-500 flex items-center gap-2">
+              <i class="ph ph-whatsapp-logo text-emerald-600 text-lg"></i>
+              <span>Data tersimpan dan langsung dialihkan ke WhatsApp resmi studio.</span>
+            </div>
+            
+            <button type="submit" id="btnSubmitOrder" class="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-sm transition shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2">
+              <i class="ph ph-whatsapp-logo font-bold text-lg"></i>
+              <span>Kirim Booking via WhatsApp</span>
+            </button>
+          </div>
+        </form>
+
+        <div id="orderSuccessBox" class="hidden mt-6 p-5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-900">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div class="flex items-center gap-3">
+              <i class="ph ph-check-circle text-2xl text-emerald-600 flex-shrink-0"></i>
+              <div>
+                <h4 class="font-bold text-sm">Pesanan Berhasil Dicatat & Dialihkan!</h4>
+                <p class="text-xs mt-0.5" id="orderSuccessMessage">ID Pelacakan Anda telah dibuat. Jika jendela WhatsApp tidak terbuka otomatis, klik tombol di sebelah kanan.</p>
+              </div>
+            </div>
+            <a id="btnDirectWaFallback" href="#" target="_blank" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 shadow transition">
+              <i class="ph ph-whatsapp-logo text-base"></i>
+              <span>Buka WhatsApp Sekarang</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== TRACK ORDER / STATUS PROJECT ==================== -->
+  <section id="cek-order" class="py-16 bg-white border-t border-slate-200">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="bg-slate-50 rounded-3xl p-6 sm:p-8 border border-slate-200 text-center">
+        <div class="w-12 h-12 rounded-2xl bg-slate-900 text-emerald-400 flex items-center justify-center text-2xl font-bold mx-auto mb-4">
+          <i class="ph ph-magnifying-glass"></i>
+        </div>
+        <h3 class="text-xl font-bold text-slate-900">Cek Status Proyek Anda</h3>
+        <p class="text-slate-500 text-xs sm:text-sm mt-1 max-w-md mx-auto">
+          Sudah memesan layanan? Masukkan Nomor WhatsApp atau Kode Pesanan Anda di bawah ini:
+        </p>
+
+        <div class="mt-6 flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+          <input type="text" id="trackInput" placeholder="Masukkan No. WhatsApp / Kode Order" class="flex-1 px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+          <button onclick="checkOrderStatus()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm transition">
+            Lacak
+          </button>
+        </div>
+
+        <div id="trackResult" class="mt-6 hidden text-left max-w-md mx-auto p-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== REVIEWS / TESTIMONIALS ==================== -->
+  <section id="reviews" class="py-20 bg-slate-50 border-t border-slate-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-12">
+        <span class="text-xs font-bold text-emerald-600 uppercase tracking-widest">Kepuasan Klien</span>
+        <h2 class="text-3xl font-extrabold text-slate-900 mt-1">Ulasan & Testimoni Nyata</h2>
+        <p class="text-slate-500 text-sm mt-2">Dengarkan pengalaman mereka yang telah mempercayakan proyek kreatif dan sistem teknologinya kepada kami.</p>
+      </div>
+
+      <div id="reviewsGrid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Dynamic reviews injected from CMS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="bg-[#0D131A] text-slate-400 py-14 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-slate-800">
+        
+        <div class="space-y-4 md:col-span-1">
+          <div class="flex items-center space-x-3">
+            <div id="footerBrandLogoContainer" class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-slate-950 font-black overflow-hidden">
+              <span id="footerBrandLogoEmoji">⚡</span>
+              <img id="footerBrandLogoImg" src="" alt="Logo" class="w-full h-full object-cover hidden">
+            </div>
+            <span id="footerBrandTitle" class="text-lg font-bold text-white">Lumina<span class="text-emerald-400">Studio</span></span>
+          </div>
+          <p id="footerBrandAbout" class="text-xs text-slate-400 leading-relaxed">
+            Studio kreatif terpadu yang memadukan fotografi beresolusi tinggi, retouching sinematik, dan rekayasa webapps serverless modern.
+          </p>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Layanan</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#services" class="hover:text-emerald-400 transition">Studio Portrait & Wisuda</a></li>
+            <li><a href="#services" class="hover:text-emerald-400 transition">Dokumentasi Acara & Wedding</a></li>
+            <li><a href="#services" class="hover:text-emerald-400 transition">Frequency Separation Retouch</a></li>
+            <li><a href="#services" class="hover:text-emerald-400 transition">Aplikasi POS Kasir & PWA</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Navigasi Cepat</h4>
+          <ul class="space-y-2 text-xs">
+            <li><a href="#portfolio" class="hover:text-emerald-400 transition">Portofolio</a></li>
+            <li><a href="#pricing" class="hover:text-emerald-400 transition">Kalkulator Biaya</a></li>
+            <li><a href="#booking" class="hover:text-emerald-400 transition">Reservasi Online</a></li>
+            <li><a href="#cek-order" class="hover:text-emerald-400 transition">Cek Status Pesanan</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="text-xs font-bold text-white uppercase tracking-wider mb-4">Kontak & Studio</h4>
+          <p class="text-xs text-slate-400" id="footerStudioAddress">Jl. Raya Studio Kreatif No. 88, Surabaya, Jawa Timur</p>
+          <div class="mt-3 flex items-center gap-2 text-xs text-emerald-400">
+            <i class="ph ph-whatsapp-logo text-base"></i>
+            <span id="footerStudioPhone">+62 812-3456-7890</span>
+          </div>
+          <div class="mt-1 flex items-center gap-2 text-xs text-slate-400">
+            <i class="ph ph-envelope text-base"></i>
+            <span id="footerStudioEmail">halo@luminastudio.id</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <p>&copy; 2026 LuminaStudio & Tech. Hak Cipta Dilindungi Undang-Undang.</p>
+        <div class="flex items-center space-x-4">
+          <button onclick="document.getElementById('btnAdminModalOpen').click()" class="text-emerald-400 hover:underline">CMS Login</button>
+          <span>•</span>
+          <span class="hover:text-slate-400">Single-File PWA Architecture</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ==================== MOBILE FLOATING QUICK ACTION BAR ==================== -->
+  <div class="md:hidden fixed bottom-4 inset-x-4 z-40">
+    <div class="bg-slate-950/90 backdrop-blur-lg border border-slate-700/80 rounded-2xl p-2.5 shadow-2xl flex items-center justify-around text-slate-300">
+      <a href="#services" class="flex flex-col items-center text-[10px] py-1 px-3 hover:text-emerald-400">
+        <i class="ph ph-squares-four text-lg"></i>
+        <span>Layanan</span>
+      </a>
+      <a href="#portfolio" class="flex flex-col items-center text-[10px] py-1 px-3 hover:text-emerald-400">
+        <i class="ph ph-image text-lg"></i>
+        <span>Galeri</span>
+      </a>
+      <a href="#booking" class="flex items-center gap-1.5 bg-emerald-500 text-slate-950 font-bold px-4 py-2 rounded-xl text-xs shadow-md">
+        <i class="ph ph-calendar-plus text-base font-bold"></i>
+        <span>Order</span>
+      </a>
+      <button onclick="document.getElementById('btnAdminModalOpen').click()" class="flex flex-col items-center text-[10px] py-1 px-3 hover:text-emerald-400">
+        <i class="ph ph-gear text-lg"></i>
+        <span>CMS</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- ==================== FULL-FEATURED ADMIN CMS MODAL ==================== -->
+  <!-- ========================================================================= -->
+  <div id="adminModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-2 sm:p-4">
+    <div class="bg-white rounded-3xl max-w-6xl w-full h-[92vh] flex flex-col shadow-2xl border border-slate-200 overflow-hidden">
+      
+      <!-- Top CMS Bar -->
+      <div class="bg-[#0D131A] text-white px-5 py-3.5 flex items-center justify-between border-b border-slate-800 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <div id="cmsBrandLogoContainer" class="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center text-slate-950 font-bold text-sm overflow-hidden">
+            <span id="cmsBrandLogoEmoji">⚡</span>
+            <img id="cmsBrandLogoImg" src="" alt="CMS Logo" class="w-full h-full object-cover hidden">
+          </div>
+          <div>
+            <span class="font-bold text-sm tracking-tight text-white flex items-center gap-1.5">
+              <span id="cmsBrandTitle">Lumina CMS</span> <span class="text-xs text-emerald-400 font-mono font-normal bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/20">Admin Studio</span>
+            </span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <span id="cmsOnlineBadge" class="hidden sm:inline-flex items-center gap-1.5 text-[11px] text-emerald-400 bg-emerald-500/10 px-2.5 py-1 rounded-full border border-emerald-500/20">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            Tersinkronisasi
+          </span>
+          <button id="btnAdminModalClose" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+            <i class="ph ph-x text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- CMS View 1: Auth Screen (When logged out) -->
+      <div id="adminAuthSection" class="flex-1 flex items-center justify-center p-6 bg-slate-50">
+        <div class="max-w-md w-full bg-white p-8 rounded-3xl border border-slate-200 shadow-xl space-y-6">
+          <div class="text-center space-y-2">
+            <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-3xl mx-auto">
+              <i class="ph ph-lock-key"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-900">Masuk ke Panel CMS</h3>
+            <p class="text-xs text-slate-500">Kelola antrean booking, katalog portofolio, ulasan klien, dan profil kontak studio.</p>
+          </div>
+
+          <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Email Administrator</label>
+              <input type="email" id="adminEmail" value="admin@luminastudio.id" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-700 mb-1">Password</label>
+              <input type="password" id="adminPassword" value="password123" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+            </div>
+            <button type="submit" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs uppercase tracking-wider transition shadow-md">
+              Login ke Workspace
+            </button>
+          </form>
+
+          <div class="p-3 bg-slate-100 rounded-xl text-[11px] text-slate-500 text-center">
+            Mode Preview/Demo: Langsung klik tombol <strong>Login</strong> dengan akun bawaan.
+          </div>
+        </div>
+      </div>
+
+      <!-- CMS View 2: CMS Management Workspace (When logged in) -->
+      <div id="adminPanelSection" class="hidden flex-1 flex flex-col md:flex-row overflow-hidden bg-slate-100">
+        
+        <!-- CMS Left Sidebar / Tabs -->
+        <aside class="w-full md:w-64 bg-slate-900 text-slate-300 p-4 flex md:flex-col justify-between flex-shrink-0 border-r border-slate-800 space-y-2">
+          <div class="space-y-1 w-full flex md:flex-col gap-1 overflow-x-auto md:overflow-visible">
+            
+            <button onclick="switchCmsTab('dashboard')" id="cmsTabBtn-dashboard" class="cms-nav-btn active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-left transition">
+              <i class="ph ph-chart-pie text-base"></i>
+              <span>Dashboard & Stats</span>
+            </button>
+
+            <button onclick="switchCmsTab('orders')" id="cmsTabBtn-orders" class="cms-nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 text-left transition">
+              <div class="flex items-center gap-3">
+                <i class="ph ph-calendar-check text-base"></i>
+                <span>Kelola Booking</span>
+              </div>
+              <span id="cmsBadgePending" class="bg-amber-500/20 text-amber-300 text-[10px] font-bold px-2 py-0.5 rounded-full">1</span>
+            </button>
+
+            <button onclick="switchCmsTab('portfolio')" id="cmsTabBtn-portfolio" class="cms-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 text-left transition">
+              <i class="ph ph-images-square text-base"></i>
+              <span>CMS Portofolio</span>
+            </button>
+
+            <button onclick="switchCmsTab('customizer')" id="cmsTabBtn-customizer" class="cms-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 text-left transition">
+              <i class="ph ph-palette text-base"></i>
+              <span>Custom Text & Gambar</span>
+            </button>
+
+            <button onclick="switchCmsTab('reviews')" id="cmsTabBtn-reviews" class="cms-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 text-left transition">
+              <i class="ph ph-chat-centered-text text-base"></i>
+              <span>Kelola Ulasan</span>
+            </button>
+
+            <button onclick="switchCmsTab('settings')" id="cmsTabBtn-settings" class="cms-nav-btn w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-800 text-left transition">
+              <i class="ph ph-sliders-horizontal text-base"></i>
+              <span>Profil & Kontak</span>
+            </button>
+          </div>
+
+          <!-- User footer in sidebar -->
+          <div class="hidden md:block pt-4 border-t border-slate-800">
+            <div class="flex items-center justify-between">
+              <div class="truncate">
+                <p class="text-[10px] text-slate-500 uppercase font-bold">Logged In</p>
+                <p class="text-xs text-white truncate" id="adminActiveUser">admin@luminastudio.id</p>
+              </div>
+              <button onclick="handleAdminLogout()" class="text-rose-400 hover:text-rose-300 p-1.5 rounded-lg hover:bg-slate-800 text-sm" title="Keluar">
+                <i class="ph ph-sign-out"></i>
+              </button>
+            </div>
+          </div>
+        </aside>
+
+        <!-- CMS Main Work Area -->
+        <main class="flex-1 overflow-y-auto p-4 sm:p-6 bg-slate-50">
+          
+          <!-- TAB 1: DASHBOARD STATS -->
+          <div id="cmsPanel-dashboard" class="cms-panel-content space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-xl font-bold text-slate-900">Ringkasan Studio & CMS</h3>
+                <p class="text-xs text-slate-500">Pantau performa reservasi dan konten portofolio aktif.</p>
+              </div>
+              <button onclick="switchCmsTab('orders')" class="self-start px-4 py-2 bg-emerald-500 text-slate-950 font-bold rounded-xl text-xs flex items-center gap-2">
+                <i class="ph ph-plus-circle"></i>
+                <span>Lihat Antrean Baru</span>
+              </button>
+            </div>
+
+            <!-- Stats KPI Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <span class="text-xs text-slate-500 font-medium">Total Pesanan</span>
+                <div class="text-2xl font-extrabold text-slate-900 mt-1" id="dashTotalOrders">0</div>
+                <div class="text-[11px] text-slate-400 mt-1">Seluruh waktu</div>
+              </div>
+              <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <span class="text-xs text-amber-600 font-medium">Perlu Dikonfirmasi</span>
+                <div class="text-2xl font-extrabold text-amber-600 mt-1" id="dashPendingOrders">0</div>
+                <div class="text-[11px] text-amber-600/80 mt-1">Antrean baru</div>
+              </div>
+              <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <span class="text-xs text-blue-600 font-medium">Sedang Dikerjakan</span>
+                <div class="text-2xl font-extrabold text-blue-600 mt-1" id="dashActiveOrders">0</div>
+                <div class="text-[11px] text-slate-400 mt-1">Sesi / Produksi</div>
+              </div>
+              <div class="p-5 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                <span class="text-xs text-emerald-600 font-medium">Total Portofolio</span>
+                <div class="text-2xl font-extrabold text-emerald-600 mt-1" id="dashTotalPortfolio">0</div>
+                <div class="text-[11px] text-slate-400 mt-1">Aktif di etalase</div>
+              </div>
+            </div>
+
+            <!-- Quick Action Shortcuts -->
+            <div class="p-6 rounded-3xl bg-slate-900 text-white border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div class="space-y-1">
+                <h4 class="font-bold text-sm text-white">Tambahkan Karya Baru ke Portofolio</h4>
+                <p class="text-xs text-slate-400">Pamerkan proyek fotografi, color grading, atau sistem aplikasi web terbaru kepada klien.</p>
+              </div>
+              <button onclick="switchCmsTab('portfolio'); openAddPortfolioModal();" class="px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold rounded-xl text-xs transition">
+                + Tambah Karya
+              </button>
+            </div>
+          </div>
+
+          <!-- TAB 2: MANAJEMEN BOOKING / ORDERS -->
+          <div id="cmsPanel-orders" class="cms-panel-content hidden space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-xl font-bold text-slate-900">Daftar Antrean & Pesanan</h3>
+                <p class="text-xs text-slate-500">Kelola status pengerjaan, hubungi klien lewat WhatsApp, dan catat progres.</p>
+              </div>
+              <div class="flex items-center gap-2">
+                <input type="text" id="orderSearchFilter" oninput="renderAdminOrders()" placeholder="Cari nama / kode..." class="px-3.5 py-2 bg-white border border-slate-300 rounded-xl text-xs focus:outline-none focus:border-emerald-500">
+              </div>
+            </div>
+
+            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+              <div class="overflow-x-auto cms-table-container">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-100 text-slate-700 font-semibold sticky top-0 z-10 border-b border-slate-200">
+                    <tr>
+                      <th class="p-3.5">ID / Klien</th>
+                      <th class="p-3.5">WhatsApp</th>
+                      <th class="p-3.5">Layanan</th>
+                      <th class="p-3.5">Tanggal</th>
+                      <th class="p-3.5">Catatan Kebutuhan</th>
+                      <th class="p-3.5">Status</th>
+                      <th class="p-3.5 text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="adminOrderTableBody" class="divide-y divide-slate-100">
+                    <!-- Dynamic Orders -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 3: CMS PORTOFOLIO -->
+          <div id="cmsPanel-portfolio" class="cms-panel-content hidden space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-xl font-bold text-slate-900">Katalog Portofolio</h3>
+                <p class="text-xs text-slate-500">Tambah, sunting, dan hapus foto/proyek yang ditampilkan pada beranda pengunjung.</p>
+              </div>
+              <button onclick="openAddPortfolioModal()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs flex items-center gap-2">
+                <i class="ph ph-plus font-bold"></i>
+                <span>Tambah Portofolio Baru</span>
+              </button>
+            </div>
+
+            <!-- Portfolio Form Drawer / Inline Box (Hidden by default) -->
+            <div id="portfolioFormBox" class="hidden p-5 bg-white border-2 border-emerald-500 rounded-2xl shadow-md space-y-4">
+              <div class="flex items-center justify-between border-b pb-3 border-slate-200">
+                <h4 class="font-bold text-sm text-slate-900" id="portfolioFormTitle">Tambah Portofolio Baru</h4>
+                <button onclick="closePortfolioForm()" class="text-slate-400 hover:text-slate-700 text-sm">
+                  <i class="ph ph-x"></i>
+                </button>
+              </div>
+
+              <form onsubmit="handleSavePortfolio(event)" class="space-y-4">
+                <input type="hidden" id="portEditId" value="">
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Judul Proyek *</label>
+                    <input type="text" id="portTitle" required placeholder="Contoh: Studio Portrait Wisuda" class="w-full px-3 py-2 text-xs border rounded-xl border-slate-300 focus:outline-none focus:border-emerald-500">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Kategori *</label>
+                    <select id="portCategory" class="w-full px-3 py-2 text-xs border rounded-xl border-slate-300 focus:outline-none focus:border-emerald-500">
+                      <option value="photo">Fotografi (photo)</option>
+                      <option value="editing">Editing & Retouch (editing)</option>
+                      <option value="webapp">Aplikasi Web / PWA (webapp)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Label Tag *</label>
+                    <input type="text" id="portTag" required placeholder="Contoh: Sesi Studio / PWA" class="w-full px-3 py-2 text-xs border rounded-xl border-slate-300 focus:outline-none focus:border-emerald-500">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Unggah Foto Portofolio *</label>
+                    <div class="flex items-center gap-2">
+                      <label class="flex-1 cursor-pointer flex items-center justify-center gap-1.5 px-3 py-2 border-2 border-dashed border-emerald-500/60 hover:border-emerald-500 bg-emerald-50/40 hover:bg-emerald-50 rounded-xl text-emerald-800 text-xs font-semibold transition">
+                        <i class="ph ph-upload-simple text-base"></i>
+                        <span id="portUploadLabel">Pilih File Foto (JPG/PNG)</span>
+                        <input type="file" id="portFileInput" accept="image/*" class="hidden" onchange="handlePortfolioFileUpload(event)">
+                      </label>
+                    </div>
+                    <div class="mt-1.5 flex items-center gap-2">
+                      <span class="text-[10px] text-slate-400">Atau via URL:</span>
+                      <input type="url" id="portImage" placeholder="https://..." class="flex-1 px-2.5 py-1 text-xs border rounded-lg border-slate-300 focus:outline-none focus:border-emerald-500" oninput="updatePortfolioPreview(this.value)">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Pratinjau & Deskripsi Singkat *</label>
+                    <div class="flex items-center gap-2 mb-1.5">
+                      <div class="w-12 h-10 rounded-lg bg-slate-100 border border-slate-200 overflow-hidden flex-shrink-0 flex items-center justify-center">
+                        <img id="portImgPreview" src="" alt="Preview" class="w-full h-full object-cover hidden">
+                        <i id="portImgPreviewPlaceholder" class="ph ph-image text-slate-400 text-lg"></i>
+                      </div>
+                      <input type="text" id="portDesc" required placeholder="Detail kamera, lighting, atau teknologi web..." class="flex-1 px-3 py-2 text-xs border rounded-xl border-slate-300 focus:outline-none focus:border-emerald-500">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                  <button type="button" onclick="closePortfolioForm()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+                    Batal
+                  </button>
+                  <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs">
+                    Simpan ke Portofolio
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Portfolio Table / List -->
+            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+              <div class="overflow-x-auto cms-table-container">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-100 text-slate-700 font-semibold sticky top-0 border-b border-slate-200">
+                    <tr>
+                      <th class="p-3.5">Pratinjau</th>
+                      <th class="p-3.5">Judul Karya</th>
+                      <th class="p-3.5">Kategori & Tag</th>
+                      <th class="p-3.5">Deskripsi</th>
+                      <th class="p-3.5 text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cmsPortfolioTableBody" class="divide-y divide-slate-100">
+                    <!-- Dynamic Portfolio Rows -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 4: KELOLA ULASAN / REVIEWS -->
+          <div id="cmsPanel-reviews" class="cms-panel-content hidden space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-xl font-bold text-slate-900">Manajemen Testimoni & Ulasan</h3>
+                <p class="text-xs text-slate-500">Moderasi testimoni klien yang ditampilkan di halaman depan.</p>
+              </div>
+              <button onclick="openAddReviewModal()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs flex items-center gap-2">
+                <i class="ph ph-plus font-bold"></i>
+                <span>Tambah Ulasan Klien</span>
+              </button>
+            </div>
+
+            <!-- Review Form Box -->
+            <div id="reviewFormBox" class="hidden p-5 bg-white border-2 border-emerald-500 rounded-2xl shadow-md space-y-4">
+              <div class="flex items-center justify-between border-b pb-3 border-slate-200">
+                <h4 class="font-bold text-sm text-slate-900">Tambah Ulasan Baru</h4>
+                <button onclick="closeReviewForm()" class="text-slate-400 hover:text-slate-700 text-sm">
+                  <i class="ph ph-x"></i>
+                </button>
+              </div>
+
+              <form onsubmit="handleSaveReview(event)" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Nama Klien *</label>
+                    <input type="text" id="revName" required placeholder="Contoh: Anisa Maharani" class="w-full px-3 py-2 text-xs border rounded-xl border-slate-300 focus:outline-none focus:border-emerald-500">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Jabatan / Klien Layanan *</label>
+                    <input type="text" id="revRole" required placeholder="Contoh: Klien Wisuda / CEO Startup" class="w-full px-3 py-2 text-xs border rounded-xl border-slate-300 focus:outline-none focus:border-emerald-500">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Rating Bintang *</label>
+                    <select id="revRating" class="w-full px-3 py-2 text-xs border rounded-xl border-slate-300">
+                      <option value="5">⭐⭐⭐⭐⭐ (5 Bintang)</option>
+                      <option value="4">⭐⭐⭐⭐ (4 Bintang)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Isi Ulasan / Testimoni *</label>
+                  <textarea id="revText" required rows="2" placeholder="Bagikan tanggapan klien mengenai hasil kerja studio..." class="w-full px-3 py-2 text-xs border rounded-xl border-slate-300 focus:outline-none focus:border-emerald-500"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                  <button type="button" onclick="closeReviewForm()" class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold">
+                    Batal
+                  </button>
+                  <button type="submit" class="px-5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs">
+                    Simpan Ulasan
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <!-- Reviews Table -->
+            <div class="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden">
+              <div class="overflow-x-auto cms-table-container">
+                <table class="w-full text-left text-xs">
+                  <thead class="bg-slate-100 text-slate-700 font-semibold border-b border-slate-200">
+                    <tr>
+                      <th class="p-3.5">Klien</th>
+                      <th class="p-3.5">Peran / Layanan</th>
+                      <th class="p-3.5">Rating</th>
+                      <th class="p-3.5">Ulasan</th>
+                      <th class="p-3.5 text-right">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="cmsReviewsTableBody" class="divide-y divide-slate-100">
+                    <!-- Injected by JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB 5: CMS VISUAL & CONTENT CUSTOMIZER -->
+          <div id="cmsPanel-customizer" class="cms-panel-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-xl font-bold text-slate-900">Kustomisasi Tampilan Gambar & Teks</h3>
+                <p class="text-xs text-slate-500">Ubah foto hero, teks judul berjalan, deskripsi layanan, dan tarif dasar langsung dari panel ini.</p>
+              </div>
+              <button type="button" onclick="resetContentCustomizerToDefault()" class="px-3.5 py-1.5 text-xs text-slate-600 hover:text-rose-600 bg-white border border-slate-300 hover:border-rose-300 rounded-xl transition">
+                Reset ke Default
+              </button>
+            </div>
+
+            <form onsubmit="handleSaveContentCustomizer(event)" class="space-y-6 max-w-4xl">
+              <!-- Section 1: Hero Banner Visual & Text -->
+              <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
+                  <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">1</span>
+                  <h4 class="font-bold text-sm text-slate-900">Hero Section (Bagian Paling Atas)</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Badge Atas Hero</label>
+                    <input type="text" id="custHeroBadge" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-500">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Teks Animasi Berjalan (Pisahkan dengan koma)</label>
+                    <input type="text" id="custHeroPhrases" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-500" placeholder="Visual Memukau, Foto Tajam, Web Modern">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-slate-700 mb-1">Deskripsi Utama Hero</label>
+                  <textarea id="custHeroDesc" rows="2" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-500"></textarea>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
+                  <div class="sm:col-span-2">
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Gambar Utama Hero Showcase</label>
+                    <div class="space-y-2">
+                      <label class="cursor-pointer flex items-center justify-center gap-2 px-4 py-2.5 border-2 border-dashed border-emerald-500/70 hover:border-emerald-600 bg-emerald-50/50 hover:bg-emerald-50 rounded-xl text-emerald-800 text-xs font-bold transition">
+                        <i class="ph ph-cloud-arrow-up text-lg"></i>
+                        <span id="custHeroUploadLabel">Pilih File Foto dari Perangkat (Galeri/Komputer)</span>
+                        <input type="file" id="custHeroFileInput" accept="image/*" class="hidden" onchange="handleImageFileUpload(event, 'custHeroImage', 'custHeroImgPreview', 'custHeroUploadLabel')">
+                      </label>
+                      <div class="flex items-center gap-2">
+                        <span class="text-[11px] text-slate-400 whitespace-nowrap">Atau URL:</span>
+                        <input type="url" id="custHeroImage" oninput="updateHeroPreview(this.value)" placeholder="https://..." class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-500">
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Pratinjau Gambar Hero</label>
+                    <div class="h-20 w-full rounded-xl bg-slate-100 border border-slate-200 overflow-hidden flex items-center justify-center">
+                      <img id="custHeroImgPreview" src="" alt="Pratinjau" class="w-full h-full object-cover">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Judul Kartu Hero</label>
+                    <input type="text" id="custHeroCardTitle" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-500">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Subjudul Kartu Hero</label>
+                    <input type="text" id="custHeroCardSubtitle" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-500">
+                  </div>
+                  <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Teks Floating Badge Bawah</label>
+                    <input type="text" id="custHeroFloatingBadge" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-500">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 2: Services Showcase Text & Images -->
+              <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
+                  <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">2</span>
+                  <h4 class="font-bold text-sm text-slate-900">Pilar Layanan (Gambar & Deskripsi)</h4>
+                </div>
+
+                <!-- Layanan 1: Fotografi -->
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-900 uppercase">Pilar 1: Fotografi</span>
+                    <span class="text-[11px] text-emerald-600 font-semibold">Tab Fotografi</span>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Judul Layanan</label>
+                      <input type="text" id="custSvcPhotoTitle" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white">
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Upload Gambar Layanan Foto</label>
+                      <div class="flex items-center gap-2">
+                        <label class="flex-1 cursor-pointer flex items-center justify-center gap-1.5 px-3 py-1.5 border border-dashed border-emerald-500 bg-white hover:bg-emerald-50 rounded-lg text-emerald-700 text-[11px] font-medium transition">
+                          <i class="ph ph-upload-simple"></i>
+                          <span id="custSvcPhotoUploadLabel">Upload File</span>
+                          <input type="file" accept="image/*" class="hidden" onchange="handleImageFileUpload(event, 'custSvcPhotoImg', 'custSvcPhotoImgPreview', 'custSvcPhotoUploadLabel')">
+                        </label>
+                        <div class="w-8 h-8 rounded-lg bg-slate-200 overflow-hidden flex-shrink-0">
+                          <img id="custSvcPhotoImgPreview" src="" class="w-full h-full object-cover">
+                        </div>
+                      </div>
+                      <input type="hidden" id="custSvcPhotoImg">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Deskripsi Singkat</label>
+                    <textarea id="custSvcPhotoDesc" rows="2" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"></textarea>
+                  </div>
+                </div>
+
+                <!-- Layanan 2: Editing -->
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-900 uppercase">Pilar 2: Editing & Retouching</span>
+                    <span class="text-[11px] text-emerald-600 font-semibold">Tab Editing</span>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Judul Layanan</label>
+                      <input type="text" id="custSvcEditingTitle" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white">
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Upload Gambar Layanan Editing</label>
+                      <div class="flex items-center gap-2">
+                        <label class="flex-1 cursor-pointer flex items-center justify-center gap-1.5 px-3 py-1.5 border border-dashed border-emerald-500 bg-white hover:bg-emerald-50 rounded-lg text-emerald-700 text-[11px] font-medium transition">
+                          <i class="ph ph-upload-simple"></i>
+                          <span id="custSvcEditingUploadLabel">Upload File</span>
+                          <input type="file" accept="image/*" class="hidden" onchange="handleImageFileUpload(event, 'custSvcEditingImg', 'custSvcEditingImgPreview', 'custSvcEditingUploadLabel')">
+                        </label>
+                        <div class="w-8 h-8 rounded-lg bg-slate-200 overflow-hidden flex-shrink-0">
+                          <img id="custSvcEditingImgPreview" src="" class="w-full h-full object-cover">
+                        </div>
+                      </div>
+                      <input type="hidden" id="custSvcEditingImg">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Deskripsi Singkat</label>
+                    <textarea id="custSvcEditingDesc" rows="2" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"></textarea>
+                  </div>
+                </div>
+
+                <!-- Layanan 3: WebApps -->
+                <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200 space-y-3">
+                  <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-900 uppercase">Pilar 3: Pembuatan WebApps</span>
+                    <span class="text-[11px] text-emerald-600 font-semibold">Tab WebApps</span>
+                  </div>
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Judul Layanan</label>
+                      <input type="text" id="custSvcWebappTitle" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white">
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-semibold text-slate-600 mb-1">Upload Gambar Layanan WebApp</label>
+                      <div class="flex items-center gap-2">
+                        <label class="flex-1 cursor-pointer flex items-center justify-center gap-1.5 px-3 py-1.5 border border-dashed border-emerald-500 bg-white hover:bg-emerald-50 rounded-lg text-emerald-700 text-[11px] font-medium transition">
+                          <i class="ph ph-upload-simple"></i>
+                          <span id="custSvcWebappUploadLabel">Upload File</span>
+                          <input type="file" accept="image/*" class="hidden" onchange="handleImageFileUpload(event, 'custSvcWebappImg', 'custSvcWebappImgPreview', 'custSvcWebappUploadLabel')">
+                        </label>
+                        <div class="w-8 h-8 rounded-lg bg-slate-200 overflow-hidden flex-shrink-0">
+                          <img id="custSvcWebappImgPreview" src="" class="w-full h-full object-cover">
+                        </div>
+                      </div>
+                      <input type="hidden" id="custSvcWebappImg">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Deskripsi Singkat</label>
+                    <textarea id="custSvcWebappDesc" rows="2" class="w-full px-3 py-1.5 rounded-lg border border-slate-300 text-xs bg-white"></textarea>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Section 3: Tarif Dasar Kalkulator -->
+              <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                <div class="flex items-center gap-2.5 pb-2 border-b border-slate-100">
+                  <span class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center text-sm font-bold">3</span>
+                  <h4 class="font-bold text-sm text-slate-900">Tarif Kalkulator Estimasi Biaya (Rp)</h4>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Foto Studio / 2 Jam</label>
+                    <input type="number" id="custPricePhotoStudio" min="0" step="5000" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Dokumentasi Event / Hari</label>
+                    <input type="number" id="custPricePhotoEvent" min="0" step="10000" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Retouching / Lembar</label>
+                    <input type="number" id="custPriceEditRetouch" min="0" step="1000" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs">
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Landing Page WebApp</label>
+                    <input type="number" id="custPriceWebLanding" min="0" step="10000" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-semibold text-slate-600 mb-1">Sistem Manajemen & POS Cloud</label>
+                    <input type="number" id="custPriceWebSystem" min="0" step="50000" class="w-full px-3.5 py-2 rounded-xl border border-slate-300 text-xs">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button & Feedback -->
+              <div class="pt-2 flex items-center justify-between">
+                <span id="customizerSaveNotice" class="hidden text-xs text-emerald-600 font-semibold flex items-center gap-1.5">
+                  <i class="ph ph-check-circle"></i>
+                  <span>Perubahan gambar & teks berhasil disimpan dan diterapkan!</span>
+                </span>
+                <button type="submit" class="ml-auto px-6 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition shadow-md shadow-emerald-500/20">
+                  Simpan Semua Perubahan
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- TAB 6: CMS PROFIL & PENGATURAN STUDIO -->
+          <div id="cmsPanel-settings" class="cms-panel-content hidden space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <h3 class="text-xl font-bold text-slate-900">Pengaturan Profil & Branding Studio</h3>
+                <p class="text-xs text-slate-500">Ubah logo brand, nama usaha studio, tagline, deskripsi singkat, nomor WhatsApp resmi, email, dan alamat fisik.</p>
+              </div>
+              <button type="button" onclick="resetStudioProfileToDefault()" class="px-3.5 py-1.5 text-xs text-slate-600 hover:text-rose-600 bg-white border border-slate-300 hover:border-rose-300 rounded-xl transition">
+                Reset Profil ke Default
+              </button>
+            </div>
+
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm max-w-3xl space-y-6">
+              <form onsubmit="handleSaveStudioSettings(event)" class="space-y-6">
+                
+                <!-- Identitas Brand & Logo -->
+                <div class="space-y-4 pb-6 border-b border-slate-100">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                    <i class="ph ph-sparkle text-emerald-600 text-base"></i>
+                    <span>Logo & Identitas Brand</span>
+                  </h4>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 items-start">
+                    <div class="sm:col-span-2 space-y-2">
+                      <label class="block text-xs font-bold text-slate-700">Unggah File Logo Studio (PNG / JPG / SVG / WebP)</label>
+                      <label class="cursor-pointer flex items-center justify-center gap-2 px-4 py-3 border-2 border-dashed border-emerald-500/70 hover:border-emerald-600 bg-emerald-50/50 hover:bg-emerald-50 rounded-xl text-emerald-800 text-xs font-bold transition">
+                        <i class="ph ph-upload-simple text-lg"></i>
+                        <span id="settingLogoUploadLabel">Pilih File Logo dari Galeri / PC</span>
+                        <input type="file" id="settingLogoFileInput" accept="image/*" class="hidden" onchange="handleStudioLogoUpload(event)">
+                      </label>
+                      <div class="flex items-center gap-2 pt-1">
+                        <span class="text-[11px] text-slate-400 whitespace-nowrap">Atau URL Gambar:</span>
+                        <input type="url" id="settingStudioLogoUrl" oninput="updateStudioLogoPreview(this.value)" placeholder="https://..." class="w-full px-3 py-1.5 rounded-xl border border-slate-300 text-xs focus:outline-none focus:border-emerald-500">
+                      </div>
+                      <input type="hidden" id="settingStudioLogoBase64" value="">
+                    </div>
+
+                    <div class="flex flex-col items-center justify-center space-y-2 p-3 bg-slate-50 border border-slate-200 rounded-2xl text-center">
+                      <span class="text-[11px] font-semibold text-slate-500">Pratinjau Logo</span>
+                      <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-300 flex items-center justify-center text-slate-950 font-extrabold text-2xl shadow-md overflow-hidden border border-emerald-400/40">
+                        <span id="settingLogoPreviewEmoji">⚡</span>
+                        <img id="settingLogoPreviewImg" src="" alt="Preview Logo" class="w-full h-full object-cover hidden">
+                      </div>
+                      <button type="button" onclick="removeStudioCustomLogo()" class="text-[10px] text-rose-500 hover:text-rose-700 font-semibold underline">Gunakan Ikon Bawaan (⚡)</button>
+                    </div>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                    <div>
+                      <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Nama Studio / Brand *</label>
+                      <input type="text" id="settingStudioName" value="LuminaStudio" required placeholder="Contoh: LuminaStudio" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                    <div>
+                      <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Tagline Singkat *</label>
+                      <input type="text" id="settingStudioTagline" value="Creative & Tech Agency" required placeholder="Contoh: Creative & Tech Agency" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Deskripsi Singkat Studio (Tampil di Footer)</label>
+                    <textarea id="settingStudioAbout" rows="2" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500" placeholder="Jelaskan ringkasan keunggulan studio Anda...">Studio kreatif terpadu yang memadukan fotografi beresolusi tinggi, retouching sinematik, dan rekayasa webapps serverless modern.</textarea>
+                  </div>
+                </div>
+
+                <!-- Kontak Resmi & Lokasi -->
+                <div class="space-y-4">
+                  <h4 class="text-xs font-bold uppercase tracking-wider text-slate-900 flex items-center gap-2">
+                    <i class="ph ph-phone-call text-emerald-600 text-base"></i>
+                    <span>Informasi Kontak & Lokasi Resmi</span>
+                  </h4>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Nomor WhatsApp Resmi Studio *</label>
+                      <input type="text" id="settingStudioPhone" value="+62 812-3456-7890" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+                      <span class="text-[11px] text-slate-400">Nomor ini menjadi tujuan pesan booking formulir & chat klien.</span>
+                    </div>
+
+                    <div>
+                      <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Email Resmi Studio *</label>
+                      <input type="email" id="settingStudioEmail" value="halo@luminastudio.id" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Alamat Studio Fisik *</label>
+                    <textarea id="settingStudioAddress" rows="2" required class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:border-emerald-500">Jl. Raya Studio Kreatif No. 88, Surabaya, Jawa Timur</textarea>
+                  </div>
+                </div>
+
+                <div class="pt-4 flex items-center justify-between border-t border-slate-100">
+                  <span id="settingSaveNotice" class="hidden text-xs text-emerald-600 font-semibold flex items-center gap-1.5">
+                    <i class="ph ph-check-circle text-base"></i>
+                    <span>Profil, logo, dan identitas studio berhasil diperbarui!</span>
+                  </span>
+                  <button type="submit" class="ml-auto px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs uppercase tracking-wider transition shadow-md shadow-emerald-500/20">
+                    Simpan Profil Studio
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </main>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==================== IMAGE LIGHTBOX MODAL ==================== -->
+  <div id="imageLightboxModal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-300" onclick="closeImageLightbox()">
+    <div class="relative max-w-4xl w-full bg-slate-900 border border-slate-800 rounded-3xl overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <div class="p-4 bg-slate-950/80 border-b border-slate-800 flex items-center justify-between">
+        <h5 id="lightboxCaption" class="text-sm font-bold text-white truncate">Pratinjau Karya</h5>
+        <button onclick="closeImageLightbox()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition">
+          <i class="ph ph-x text-lg"></i>
+        </button>
+      </div>
+      <div class="relative max-h-[75vh] flex items-center justify-center bg-black/60 p-2">
+        <img id="lightboxImg" src="" alt="Pratinjau" class="max-h-[70vh] w-auto max-w-full object-contain rounded-xl transition-transform duration-300">
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== JAVASCRIPT & FIREBASE LOGIC ==================== -->
+  <script type="module">
+    // KONFIGURASI APLIKASI
+    const IS_PREVIEW = true; // Set false jika sudah terhubung ke Firebase Console
+    const firebaseConfig = {
+      apiKey: "AIzaSyBcH7q2HoF0BSLPeujWI8c21388_vryiuw",
+  authDomain: "datu-production.firebaseapp.com",
+  projectId: "datu-production",
+  storageBucket: "datu-production.firebasestorage.app",
+  messagingSenderId: "801989565358",
+  appId: "1:801989565358:web:d98ef93a7f5a3757e9463f",
+  measurementId: "G-9D0WLM7ZPT"
+    };
+
+    let auth = null;
+    let db = null;
+
+    // ==================== ANIMATION CONTROLLERS ====================
+    // 1. Headline Typewriter Effect
+    let phrases = [
+      "Visual Memukau",
+      "Foto Komersial Tajam",
+      "Color Grading Sinematik",
+      "Sistem WebApps Modern"
+    ];
+    let phraseIdx = 0;
+    let charIdx = 0;
+    let isDeleting = false;
+    const typingSpeed = 90;
+    const deletingSpeed = 45;
+    const pauseDelay = 1800;
+    let typewriterTimeoutId = null;
+
+    function runTypewriter() {
+      const el = document.getElementById('animatedHeroText');
+      if (!el) return;
+
+      if (!phrases || phrases.length === 0) {
+        phrases = ["Visual Memukau"];
+      }
+
+      const currentPhrase = phrases[phraseIdx % phrases.length];
+
+      if (isDeleting) {
+        charIdx--;
+        el.innerText = currentPhrase.substring(0, Math.max(0, charIdx));
+      } else {
+        charIdx++;
+        el.innerText = currentPhrase.substring(0, charIdx);
+      }
+
+      let timeout = isDeleting ? deletingSpeed : typingSpeed;
+
+      if (!isDeleting && charIdx >= currentPhrase.length) {
+        timeout = pauseDelay;
+        isDeleting = true;
+      } else if (isDeleting && charIdx <= 0) {
+        isDeleting = false;
+        phraseIdx = (phraseIdx + 1) % phrases.length;
+        timeout = 400;
+      }
+
+      clearTimeout(typewriterTimeoutId);
+      typewriterTimeoutId = setTimeout(runTypewriter, timeout);
+    }
+
+    // 2. Scroll Reveal Intersection Observer
+    function setupScrollReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          }
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+    }
+
+    // 3. Image Lightbox Functions
+    window.openImageLightbox = function(imageUrl, title) {
+      const modal = document.getElementById('imageLightboxModal');
+      const img = document.getElementById('lightboxImg');
+      const caption = document.getElementById('lightboxCaption');
+      if (!modal || !img) return;
+
+      img.src = imageUrl;
+      caption.innerText = title || 'Pratinjau Karya Visual';
+      modal.classList.remove('hidden');
+    };
+
+    window.closeImageLightbox = function() {
+      const modal = document.getElementById('imageLightboxModal');
+      if (modal) modal.classList.add('hidden');
+    };
+
+    // Render Portofolio dengan efek shimmer, smooth zoom, dan lightbox trigger
+    function renderPortfolios() {
+      const grid = document.getElementById('portfolioGrid');
+      if (!grid) return;
+
+      const filtered = state.portfolioCategory === 'all' 
+        ? state.portfolios 
+        : state.portfolios.filter(p => p.category === state.portfolioCategory);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div class="col-span-3 text-center py-12 text-slate-400 text-xs">Belum ada karya pada kategori ini. Tambahkan melalui Panel CMS.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <div class="bg-white rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm hover:shadow-xl transition-all duration-300 group hover:-translate-y-1.5 reveal-on-scroll">
+          <div class="relative aspect-video overflow-hidden bg-slate-100 shimmer-card cursor-pointer" onclick="openImageLightbox('${item.image}', '${item.title.replace(/'/g, "\\'")}')">
+            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out">
+            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-emerald-400 text-[10px] font-bold px-2.5 py-1 rounded-lg">
+              ${item.tag}
+            </span>
+            <div class="absolute inset-0 bg-slate-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="p-2.5 rounded-full bg-slate-900/80 text-emerald-400 backdrop-blur-md text-sm">
+                <i class="ph ph-magnifying-glass-plus font-bold"></i>
+              </span>
+            </div>
+          </div>
+          <div class="p-5">
+            <h4 class="font-bold text-slate-900 text-base mb-1.5 group-hover:text-emerald-600 transition-colors">${item.title}</h4>
+            <p class="text-xs text-slate-500 leading-relaxed mb-4 line-clamp-2">${item.desc}</p>
+            <a href="#booking" onclick="preselectService('${item.category === 'photo' ? 'Fotografi' : item.category === 'editing' ? 'Editing' : 'WebApp'}')" class="text-xs font-bold text-emerald-600 hover:text-emerald-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+              <span>Pesan Serupa</span>
+              <i class="ph ph-arrow-right font-bold"></i>
+            </a>
+          </div>
+        </div>
+      `).join('');
+
+      setupScrollReveal();
+    }
+
+    // Dynamic Service Worker PWA registration via Blob
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        self.addEventListener('install', (e) => self.skipWaiting());
+        self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
+        self.addEventListener('fetch', (e) => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+    }
+
+    // ==================== STATE MANAGEMENT ====================
+    let state = {
+      isAdmin: false,
+      activeServiceTab: 'photo',
+      portfolioCategory: 'all',
+      studioSettings: {
+        name: 'LuminaStudio',
+        tagline: 'Creative & Tech Agency',
+        logo: '',
+        about: 'Studio kreatif terpadu yang memadukan fotografi beresolusi tinggi, retouching sinematik, dan rekayasa webapps serverless modern.',
+        phone: '+62 812-3456-7890',
+        email: 'halo@luminastudio.id',
+        address: 'Jl. Raya Studio Kreatif No. 88, Surabaya, Jawa Timur'
+      },
+      contentCustomizer: {
+        heroBadge: '3 Pilar Kreatif: Foto • Retouch • Fullstack Web',
+        heroPhrases: [
+          'Visual Memukau',
+          'Foto Komersial Tajam',
+          'Color Grading Sinematik',
+          'Sistem WebApps Modern'
+        ],
+        heroDesc: 'Dari sesi pemotretan profesional kelas tinggi, grading warna sinematik, hingga rancang bangun aplikasi web interaktif responsif berbasis database cloud untuk bisnis Anda.',
+        heroImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+        heroCardTitle: '4K Studio Capture',
+        heroCardSubtitle: 'Sony Alpha Master Sensor',
+        heroCardBadge: 'Pro',
+        heroFloatingBadge: 'Live Production Ready',
+        // Services Content
+        svcPhotoTitle: 'Layanan Fotografi Komersial & Personal',
+        svcPhotoDesc: 'Kami menghidupkan visual brand Anda melalui pencahayaan sinematik dan komposisi presisi. Cocok untuk katalog produk, potret wisuda, profil korporat, dokumentasi wedding, dan event.',
+        svcPhotoImg: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=800&q=80',
+        svcEditingTitle: 'High-End Retouching & Color Grading',
+        svcEditingDesc: 'Punya materi foto atau video mentah yang butuh sentuhan estetik? Kami menyediakan layanan retouch tekstur kulit alami (Frequency Separation), color grading filmik, dan editing reels/tiktok viral.',
+        svcEditingImg: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80',
+        svcWebappTitle: 'Pembuatan Aplikasi Web & PWA Custom',
+        svcWebappDesc: 'Bangun sistem bisnis online yang cepat, interaktif, dan tanpa langganan server mahal. Dari sistem kasir (POS), dashboard manajemen stok, portal klien, hingga integrasi database real-time.',
+        svcWebappImg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+        // Calculator Pricing Rates
+        priceRates: {
+          photo_studio: 450000,
+          photo_event: 1200000,
+          edit_retouch: 25000,
+          webapp_landing: 750000,
+          webapp_system: 2500000
+        }
+      },
+      portfolios: [
+        {
+          id: 'p1',
+          title: 'Portrait Minimalis Studio',
+          category: 'photo',
+          tag: 'Fotografi Studio',
+          image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80',
+          desc: 'Lighting satu sumber key light Godox untuk gradasi bayangan dramatis.'
+        },
+        {
+          id: 'p2',
+          title: 'Cinematic Color Grading Film',
+          category: 'editing',
+          tag: 'Photo Retouching',
+          image: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=700&q=80',
+          desc: 'Koreksi tone warna warm-vintage dan retouching tekstur pori wajah.'
+        },
+        {
+          id: 'p3',
+          title: 'Sistem POS Kasir Modern PWA',
+          category: 'webapp',
+          tag: 'Web Application',
+          image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=700&q=80',
+          desc: 'Aplikasi kasir multi-cabang terintegrasi database realtime & cetak struk Bluetooth.'
+        },
+        {
+          id: 'p4',
+          title: 'Dokumentasi Wedding Intimate',
+          category: 'photo',
+          tag: 'Dokumentasi Acara',
+          image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=700&q=80',
+          desc: 'Tangkap emosi spontan dengan lensa prime 85mm f/1.4 tajam memikat.'
+        },
+        {
+          id: 'p5',
+          title: 'Custom Preset Moody Teal & Orange',
+          category: 'editing',
+          tag: 'Presets & Retouch',
+          image: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=700&q=80',
+          desc: 'Pemisahan warna saturasi tinggi untuk feed Instagram profesional.'
+        },
+        {
+          id: 'p6',
+          title: 'Portal Booking & Jadwal Otomatis',
+          category: 'webapp',
+          tag: 'Aplikasi Client-Side',
+          image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=700&q=80',
+          desc: 'Sistem antrean klien langsung terhubung ke bot WhatsApp reminder.'
+        }
+      ],
+      orders: [
+        {
+          id: 'LUM-8921',
+          clientName: 'Bima Satria',
+          phone: '081299887766',
+          category: 'Fotografi',
+          targetDate: '2026-11-05',
+          status: 'Sedang Dikerjakan',
+          notes: 'Sesi foto produk fashion 10 outfit di outdoor.'
+        },
+        {
+          id: 'LUM-4320',
+          clientName: 'Dina Lestari',
+          phone: '085711223344',
+          category: 'WebApp',
+          targetDate: '2026-11-12',
+          status: 'Menunggu Konfirmasi',
+          notes: 'Aplikasi katalog digital untuk toko kue berbasis PWA.'
+        }
+      ],
+      reviews: [
+        {
+          id: 'r1',
+          name: 'Sarah Wijaya',
+          role: 'Owner Cafe Kopi Rasa',
+          rating: 5,
+          text: 'Hasil fotonya luar biasa jernih! Web kasir PWA yang dibuatkan juga sangat mudah digunakan staf saya tanpa repot setup server.'
+        },
+        {
+          id: 'r2',
+          name: 'Bagus Priyanto',
+          role: 'Content Creator',
+          rating: 5,
+          text: 'Color grading video reels saya selalu diserahkan ke Lumina. Cepat, warna kulit tetap natural, dan engagement followers langsung naik!'
+        },
+        {
+          id: 'r3',
+          name: 'Eka & Randy',
+          role: 'Klien Wedding',
+          rating: 5,
+          text: 'Tim fotografernya sangat ramah mengarahkan pose. Pengiriman hasil link Google Drive sangat rapi dan tepat waktu.'
+        }
+      ]
+    };
+
+    // Load from LocalStorage if available
+    const savedState = localStorage.getItem('lumina_cms_state');
+    if (savedState) {
+      try {
+        const parsed = JSON.parse(savedState);
+        state.orders = parsed.orders || state.orders;
+        state.portfolios = parsed.portfolios || state.portfolios;
+        state.reviews = parsed.reviews || state.reviews;
+        if (parsed.studioSettings) {
+          state.studioSettings = {
+            ...state.studioSettings,
+            ...parsed.studioSettings
+          };
+        }
+        if (parsed.contentCustomizer) {
+          state.contentCustomizer = {
+            ...state.contentCustomizer,
+            ...parsed.contentCustomizer,
+            priceRates: {
+              ...state.contentCustomizer.priceRates,
+              ...(parsed.contentCustomizer.priceRates || {})
+            }
+          };
+        }
+      } catch (err) {}
+    }
+
+    function persistState() {
+      localStorage.setItem('lumina_cms_state', JSON.stringify({
+        orders: state.orders,
+        portfolios: state.portfolios,
+        reviews: state.reviews,
+        studioSettings: state.studioSettings,
+        contentCustomizer: state.contentCustomizer
+      }));
+    }
+
+    // ==================== AUTO SETUP DATABASE ====================
+    window.autoSetupDatabase = async function() {
+      if (IS_PREVIEW || !db) return;
+      try {
+        const ordersCol = collection(db, 'artifacts', 'lumina-app', 'public', 'data', 'orders');
+        const snap = await getDocs(ordersCol);
+        if (snap.empty) {
+          for (const item of state.orders) {
+            await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'orders', item.id), item);
+          }
+          for (const item of state.portfolios) {
+            await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'portfolios', item.id), item);
+          }
+          for (const item of state.reviews) {
+            await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'reviews', item.id), item);
+          }
+        }
+      } catch (err) {
+        console.info("Info Firebase:", err.message);
+      }
+    };
+
+    // ==================== FRONTEND RENDERING ====================
+    window.switchServiceTab = function(tabKey) {
+      state.activeServiceTab = tabKey;
+      document.querySelectorAll('.service-tab-btn').forEach(btn => {
+        btn.classList.remove('bg-white', 'text-slate-900', 'shadow-sm', 'active');
+        btn.classList.add('text-slate-600');
+      });
+      document.querySelectorAll('.service-content-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+
+      const activeBtn = document.getElementById(`tabBtn-${tabKey}`);
+      const activePanel = document.getElementById(`tabContent-${tabKey}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'text-slate-900', 'shadow-sm', 'active');
+        activeBtn.classList.remove('text-slate-600');
+      }
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+      }
+    };
+
+    window.preselectService = function(category) {
+      const select = document.getElementById('orderCategory');
+      if (select) select.value = category;
+    };
+
+    window.filterPortfolio = function(cat) {
+      state.portfolioCategory = cat;
+      document.querySelectorAll('.port-filter').forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white', 'active');
+        btn.classList.add('bg-white', 'text-slate-600');
+      });
+      event.target.classList.add('bg-slate-900', 'text-white', 'active');
+      event.target.classList.remove('bg-white', 'text-slate-600');
+      renderPortfolios();
+    };
+
+    function renderReviews() {
+      const grid = document.getElementById('reviewsGrid');
+      if (!grid) return;
+
+      grid.innerHTML = state.reviews.map(rev => `
+        <div class="p-6 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="space-y-3">
+            <div class="flex text-amber-400 text-sm">
+              ${Array(Number(rev.rating) || 5).fill('<i class="ph ph-star-fill"></i>').join('')}
+            </div>
+            <p class="text-xs sm:text-sm text-slate-600 italic leading-relaxed">"${rev.text}"</p>
+          </div>
+          <div class="pt-5 mt-4 border-t border-slate-100 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-xs">
+              ${(rev.name || 'K').charAt(0)}
+            </div>
+            <div>
+              <h5 class="text-xs font-bold text-slate-900">${rev.name}</h5>
+              <span class="text-[11px] text-slate-400">${rev.role}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateFooterDisplay() {
+      const p = document.getElementById('footerStudioPhone');
+      const e = document.getElementById('footerStudioEmail');
+      const a = document.getElementById('footerStudioAddress');
+      if (p) p.innerText = state.studioSettings.phone;
+      if (e) e.innerText = state.studioSettings.email;
+      if (a) a.innerText = state.studioSettings.address;
+      updateBrandingUI();
+    }
+
+    // Update Brand Name, Tagline & Logo across Navbar, Footer, and CMS
+    function updateBrandingUI() {
+      const st = state.studioSettings;
+      if (!st) return;
+
+      const studioName = st.name || 'LuminaStudio';
+      const tagline = st.tagline || 'Creative & Tech Agency';
+      const logoUrl = st.logo || '';
+      const aboutText = st.about || 'Studio kreatif terpadu yang memadukan fotografi beresolusi tinggi, retouching sinematik, dan rekayasa webapps serverless modern.';
+
+      // Update Page Title
+      document.title = `${studioName} - Fotografi, Editing & Pembuatan WebApp`;
+
+      // Helper to format name with accent color on the second word
+      function formatBrandHTML(nameStr) {
+        const words = nameStr.trim().split(' ');
+        if (words.length > 1) {
+          const first = words[0];
+          const rest = words.slice(1).join(' ');
+          return `${first} <span class="text-emerald-400">${rest}</span>`;
+        }
+        if (nameStr.length > 6) {
+          const part1 = nameStr.slice(0, 6);
+          const part2 = nameStr.slice(6);
+          return `${part1}<span class="text-emerald-400">${part2}</span>`;
+        }
+        return `${nameStr}`;
+      }
+
+      // Update Navbar Branding
+      const navTitle = document.getElementById('navBrandTitle');
+      const navTag = document.getElementById('navBrandTagline');
+      const navLogoImg = document.getElementById('navBrandLogoImg');
+      const navLogoEmoji = document.getElementById('navBrandLogoEmoji');
+      if (navTitle) navTitle.innerHTML = formatBrandHTML(studioName);
+      if (navTag) navTag.innerText = tagline;
+      if (navLogoImg && navLogoEmoji) {
+        if (logoUrl) {
+          navLogoImg.src = logoUrl;
+          navLogoImg.classList.remove('hidden');
+          navLogoEmoji.classList.add('hidden');
+        } else {
+          navLogoImg.classList.add('hidden');
+          navLogoEmoji.classList.remove('hidden');
+        }
+      }
+
+      // Update Footer Branding
+      const footTitle = document.getElementById('footerBrandTitle');
+      const footAbout = document.getElementById('footerBrandAbout');
+      const footLogoImg = document.getElementById('footerBrandLogoImg');
+      const footLogoEmoji = document.getElementById('footerBrandLogoEmoji');
+      if (footTitle) footTitle.innerHTML = formatBrandHTML(studioName);
+      if (footAbout) footAbout.innerText = aboutText;
+      if (footLogoImg && footLogoEmoji) {
+        if (logoUrl) {
+          footLogoImg.src = logoUrl;
+          footLogoImg.classList.remove('hidden');
+          footLogoEmoji.classList.add('hidden');
+        } else {
+          footLogoImg.classList.add('hidden');
+          footLogoEmoji.classList.remove('hidden');
+        }
+      }
+
+      // Update CMS Header Branding
+      const cmsTitle = document.getElementById('cmsBrandTitle');
+      const cmsLogoImg = document.getElementById('cmsBrandLogoImg');
+      const cmsLogoEmoji = document.getElementById('cmsBrandLogoEmoji');
+      if (cmsTitle) cmsTitle.innerText = `${studioName} CMS`;
+      if (cmsLogoImg && cmsLogoEmoji) {
+        if (logoUrl) {
+          cmsLogoImg.src = logoUrl;
+          cmsLogoImg.classList.remove('hidden');
+          cmsLogoEmoji.classList.add('hidden');
+        } else {
+          cmsLogoImg.classList.add('hidden');
+          cmsLogoEmoji.classList.remove('hidden');
+        }
+      }
+    }
+    // Handle Studio Logo Upload in CMS Settings
+    window.handleStudioLogoUpload = async function(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      try {
+        const label = document.getElementById('settingLogoUploadLabel');
+        if (label) label.innerText = 'Mengompres logo...';
+
+        const base64Data = await compressAndConvertToBase64(file, 400, 0.9);
+        document.getElementById('settingStudioLogoBase64').value = base64Data;
+        document.getElementById('settingStudioLogoUrl').value = '';
+        updateStudioLogoPreview(base64Data);
+
+        if (label) label.innerText = file.name.length > 20 ? file.name.substring(0, 18) + '...' : file.name;
+      } catch (err) {
+        console.error('Gagal mengunggah logo studio:', err);
+      }
+    };
+
+    window.updateStudioLogoPreview = function(url) {
+      const img = document.getElementById('settingLogoPreviewImg');
+      const emoji = document.getElementById('settingLogoPreviewEmoji');
+      if (url && img && emoji) {
+        img.src = url;
+        img.classList.remove('hidden');
+        emoji.classList.add('hidden');
+      } else if (img && emoji) {
+        img.classList.add('hidden');
+        emoji.classList.remove('hidden');
+      }
+    };
+
+    window.removeStudioCustomLogo = function() {
+      document.getElementById('settingStudioLogoBase64').value = '';
+      document.getElementById('settingStudioLogoUrl').value = '';
+      document.getElementById('settingLogoUploadLabel').innerText = 'Pilih File Logo dari Galeri / PC';
+      updateStudioLogoPreview('');
+    };
+
+    function populateStudioSettingsForm() {
+      const st = state.studioSettings;
+      if (!st) return;
+
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val || '';
+      };
+
+      setVal('settingStudioName', st.name || 'LuminaStudio');
+      setVal('settingStudioTagline', st.tagline || 'Creative & Tech Agency');
+      setVal('settingStudioAbout', st.about || '');
+      setVal('settingStudioPhone', st.phone || '+62 812-3456-7890');
+      setVal('settingStudioEmail', st.email || 'halo@luminastudio.id');
+      setVal('settingStudioAddress', st.address || 'Jl. Raya Studio Kreatif No. 88, Surabaya, Jawa Timur');
+      setVal('settingStudioLogoBase64', st.logo || '');
+      
+      if (st.logo && st.logo.startsWith('http')) {
+        setVal('settingStudioLogoUrl', st.logo);
+      } else {
+        setVal('settingStudioLogoUrl', '');
+      }
+
+      updateStudioLogoPreview(st.logo);
+    }
+
+    // CMS: STUDIO SETTINGS & BRANDING SAVE
+    window.handleSaveStudioSettings = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('settingStudioName').value.trim() || 'LuminaStudio';
+      const tagline = document.getElementById('settingStudioTagline').value.trim() || 'Creative & Tech Agency';
+      const about = document.getElementById('settingStudioAbout').value.trim();
+      const phone = document.getElementById('settingStudioPhone').value.trim();
+      const email = document.getElementById('settingStudioEmail').value.trim();
+      const address = document.getElementById('settingStudioAddress').value.trim();
+
+      const logoBase64 = document.getElementById('settingStudioLogoBase64').value.trim();
+      const logoUrl = document.getElementById('settingStudioLogoUrl').value.trim();
+      const finalLogo = logoBase64 || logoUrl || '';
+
+      state.studioSettings = {
+        name,
+        tagline,
+        logo: finalLogo,
+        about,
+        phone,
+        email,
+        address
+      };
+
+      persistState();
+      updateFooterDisplay();
+
+      const notice = document.getElementById('settingSaveNotice');
+      if (notice) {
+        notice.classList.remove('hidden');
+        setTimeout(() => notice.classList.add('hidden'), 3000);
+      }
+
+      if (!IS_PREVIEW && db) {
+        try {
+          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'settings', 'studioProfile'), state.studioSettings);
+        } catch(err) {
+          console.warn("Gagal simpan profil studio ke Firestore:", err);
+        }
+      }
+    };
+
+    window.resetStudioProfileToDefault = function() {
+      if (!confirm('Kembalikan logo, nama, tagline, dan kontak studio ke pengaturan bawaan LuminaStudio?')) return;
+      state.studioSettings = {
+        name: 'LuminaStudio',
+        tagline: 'Creative & Tech Agency',
+        logo: '',
+        about: 'Studio kreatif terpadu yang memadukan fotografi beresolusi tinggi, retouching sinematik, dan rekayasa webapps serverless modern.',
+        phone: '+62 812-3456-7890',
+        email: 'halo@luminastudio.id',
+        address: 'Jl. Raya Studio Kreatif No. 88, Surabaya, Jawa Timur'
+      };
+
+      persistState();
+      populateStudioSettingsForm();
+      updateFooterDisplay();
+    };
+
+    // CMS: CONTENT CUSTOMIZER LOGIC
+    function applyContentCustomizer() {
+      const c = state.contentCustomizer;
+      if (!c) return;
+
+      // Hero Elements
+      if (c.heroPhrases && Array.isArray(c.heroPhrases) && c.heroPhrases.length > 0) {
+        phrases = [...c.heroPhrases];
+      }
+      const elHeroDesc = document.querySelector('section.relative p.text-slate-400');
+      if (elHeroDesc && c.heroDesc) elHeroDesc.innerText = c.heroDesc;
+
+      const elHeroImg = document.getElementById('heroShowcaseImg');
+      if (elHeroImg && c.heroImage) elHeroImg.src = c.heroImage;
+
+      const elHeroCardTitle = document.getElementById('heroCardTitle');
+      if (elHeroCardTitle && c.heroCardTitle) elHeroCardTitle.innerText = c.heroCardTitle;
+
+      const elHeroCardSub = document.getElementById('heroCardSubtitle');
+      if (elHeroCardSub && c.heroCardSubtitle) elHeroCardSub.innerText = c.heroCardSubtitle;
+
+      const elHeroBadge = document.getElementById('heroFloatingBadge');
+      if (elHeroBadge && c.heroFloatingBadge) elHeroBadge.innerText = c.heroFloatingBadge;
+
+      // Services Elements
+      const setEl = (id, text) => {
+        const el = document.getElementById(id);
+        if (el && text) el.innerText = text;
+      };
+      const setImg = (id, src) => {
+        const el = document.getElementById(id);
+        if (el && src) el.src = src;
+      };
+
+      setEl('svcPhotoTitle', c.svcPhotoTitle);
+      setEl('svcPhotoDesc', c.svcPhotoDesc);
+      setImg('svcPhotoImg', c.svcPhotoImg);
+
+      setEl('svcEditingTitle', c.svcEditingTitle);
+      setEl('svcEditingDesc', c.svcEditingDesc);
+      setImg('svcEditingImg', c.svcEditingImg);
+
+      setEl('svcWebappTitle', c.svcWebappTitle);
+      setEl('svcWebappDesc', c.svcWebappDesc);
+      setImg('svcWebappImg', c.svcWebappImg);
+
+      // Price Texts in Services Section
+      if (c.priceRates) {
+        const fmt = (v) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(v);
+        setEl('svcPhotoPriceText', fmt(c.priceRates.photo_studio));
+        setEl('svcEditingPriceText', fmt(c.priceRates.edit_retouch));
+        setEl('svcWebappPriceText', fmt(c.priceRates.webapp_landing));
+      }
+    }
+
+    function populateCustomizerForm() {
+      const c = state.contentCustomizer;
+      if (!c) return;
+
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el && val !== undefined) el.value = val;
+      };
+
+      setVal('custHeroBadge', c.heroBadge);
+      setVal('custHeroPhrases', Array.isArray(c.heroPhrases) ? c.heroPhrases.join(', ') : '');
+      setVal('custHeroDesc', c.heroDesc);
+      setVal('custHeroImage', c.heroImage);
+      setVal('custHeroCardTitle', c.heroCardTitle);
+      setVal('custHeroCardSubtitle', c.heroCardSubtitle);
+      setVal('custHeroFloatingBadge', c.heroFloatingBadge);
+
+      const previewImg = document.getElementById('custHeroImgPreview');
+      if (previewImg) previewImg.src = c.heroImage || '';
+
+      setVal('custSvcPhotoTitle', c.svcPhotoTitle);
+      setVal('custSvcPhotoImg', c.svcPhotoImg);
+      const photoPrev = document.getElementById('custSvcPhotoImgPreview');
+      if (photoPrev) photoPrev.src = c.svcPhotoImg || '';
+      setVal('custSvcPhotoDesc', c.svcPhotoDesc);
+
+      setVal('custSvcEditingTitle', c.svcEditingTitle);
+      setVal('custSvcEditingImg', c.svcEditingImg);
+      const editPrev = document.getElementById('custSvcEditingImgPreview');
+      if (editPrev) editPrev.src = c.svcEditingImg || '';
+      setVal('custSvcEditingDesc', c.svcEditingDesc);
+
+      setVal('custSvcWebappTitle', c.svcWebappTitle);
+      setVal('custSvcWebappImg', c.svcWebappImg);
+      const webPrev = document.getElementById('custSvcWebappImgPreview');
+      if (webPrev) webPrev.src = c.svcWebappImg || '';
+      setVal('custSvcWebappDesc', c.svcWebappDesc);
+
+      if (c.priceRates) {
+        setVal('custPricePhotoStudio', c.priceRates.photo_studio);
+        setVal('custPricePhotoEvent', c.priceRates.photo_event);
+        setVal('custPriceEditRetouch', c.priceRates.edit_retouch);
+        setVal('custPriceWebLanding', c.priceRates.webapp_landing);
+        setVal('custPriceWebSystem', c.priceRates.webapp_system);
+      }
+    }
+
+    window.updateHeroPreview = function(url) {
+      const preview = document.getElementById('custHeroImgPreview');
+      if (preview && url) preview.src = url;
+    };
+
+    // Helper: Kompresi gambar client-side dan konversi ke Base64 Data URI
+    window.compressAndConvertToBase64 = function(file, maxWidth = 1200, quality = 0.8) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width;
+            let height = img.height;
+
+            if (width > maxWidth) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            const dataUrl = canvas.toDataURL('image/jpeg', quality);
+            resolve(dataUrl);
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    };
+
+    // Handler umum upload file gambar CMS
+    window.handleImageFileUpload = async function(event, targetInputId, targetPreviewId, labelId) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      try {
+        const labelEl = document.getElementById(labelId);
+        if (labelEl) labelEl.innerText = 'Memproses...';
+
+        const base64Data = await compressAndConvertToBase64(file, 1200, 0.82);
+        
+        const inputEl = document.getElementById(targetInputId);
+        if (inputEl) inputEl.value = base64Data;
+
+        const previewEl = document.getElementById(targetPreviewId);
+        if (previewEl) previewEl.src = base64Data;
+
+        if (labelEl) labelEl.innerText = file.name.length > 20 ? file.name.substring(0, 18) + '...' : file.name;
+      } catch (err) {
+        console.error('Gagal mengunggah gambar:', err);
+      }
+    };
+
+    // Handler upload foto pada portofolio
+    window.handlePortfolioFileUpload = async function(event) {
+      const file = event.target.files?.[0];
+      if (!file) return;
+
+      try {
+        const label = document.getElementById('portUploadLabel');
+        if (label) label.innerText = 'Memproses...';
+
+        const base64Data = await compressAndConvertToBase64(file, 1000, 0.8);
+        document.getElementById('portImage').value = base64Data;
+        updatePortfolioPreview(base64Data);
+
+        if (label) label.innerText = file.name.length > 18 ? file.name.substring(0, 16) + '...' : file.name;
+      } catch (err) {
+        console.error('Gagal mengunggah foto portofolio:', err);
+      }
+    };
+
+    window.updatePortfolioPreview = function(url) {
+      const previewImg = document.getElementById('portImgPreview');
+      const placeholder = document.getElementById('portImgPreviewPlaceholder');
+      if (url && previewImg) {
+        previewImg.src = url;
+        previewImg.classList.remove('hidden');
+        if (placeholder) placeholder.classList.add('hidden');
+      } else if (previewImg && placeholder) {
+        previewImg.classList.add('hidden');
+        placeholder.classList.remove('hidden');
+      }
+    };
+
+    window.handleSaveContentCustomizer = async function(e) {
+      e.preventDefault();
+
+      const getVal = (id) => document.getElementById(id)?.value.trim() || '';
+      const phrasesRaw = getVal('custHeroPhrases');
+      const phrasesParsed = phrasesRaw
+        ? phrasesRaw.split(',').map(s => s.trim()).filter(Boolean)
+        : state.contentCustomizer.heroPhrases;
+
+      state.contentCustomizer = {
+        heroBadge: getVal('custHeroBadge'),
+        heroPhrases: phrasesParsed,
+        heroDesc: getVal('custHeroDesc'),
+        heroImage: getVal('custHeroImage'),
+        heroCardTitle: getVal('custHeroCardTitle'),
+        heroCardSubtitle: getVal('custHeroCardSubtitle'),
+        heroCardBadge: 'Pro',
+        heroFloatingBadge: getVal('custHeroFloatingBadge'),
+
+        svcPhotoTitle: getVal('custSvcPhotoTitle'),
+        svcPhotoImg: getVal('custSvcPhotoImg'),
+        svcPhotoDesc: getVal('custSvcPhotoDesc'),
+
+        svcEditingTitle: getVal('custSvcEditingTitle'),
+        svcEditingImg: getVal('custSvcEditingImg'),
+        svcEditingDesc: getVal('custSvcEditingDesc'),
+
+        svcWebappTitle: getVal('custSvcWebappTitle'),
+        svcWebappImg: getVal('custSvcWebappImg'),
+        svcWebappDesc: getVal('custSvcWebappDesc'),
+
+        priceRates: {
+          photo_studio: parseFloat(getVal('custPricePhotoStudio')) || 450000,
+          photo_event: parseFloat(getVal('custPricePhotoEvent')) || 1200000,
+          edit_retouch: parseFloat(getVal('custPriceEditRetouch')) || 25000,
+          webapp_landing: parseFloat(getVal('custPriceWebLanding')) || 750000,
+          webapp_system: parseFloat(getVal('custPriceWebSystem')) || 2500000
+        }
+      };
+
+      persistState();
+      applyContentCustomizer();
+      calculatePrice();
+
+      const notice = document.getElementById('customizerSaveNotice');
+      if (notice) {
+        notice.classList.remove('hidden');
+        setTimeout(() => notice.classList.add('hidden'), 3000);
+      }
+
+      if (!IS_PREVIEW && db) {
+        try {
+          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'settings', 'customizer'), state.contentCustomizer);
+        } catch(err) {
+          console.warn("Gagal simpan customizer ke Firestore:", err);
+        }
+      }
+    };
+
+    window.resetContentCustomizerToDefault = function() {
+      if (!confirm('Kembalikan seluruh teks, gambar, dan tarif kalkulator ke pengaturan awal bawaan?')) return;
+      state.contentCustomizer = {
+        heroBadge: '3 Pilar Kreatif: Foto • Retouch • Fullstack Web',
+        heroPhrases: [
+          'Visual Memukau',
+          'Foto Komersial Tajam',
+          'Color Grading Sinematik',
+          'Sistem WebApps Modern'
+        ],
+        heroDesc: 'Dari sesi pemotretan profesional kelas tinggi, grading warna sinematik, hingga rancang bangun aplikasi web interaktif responsif berbasis database cloud untuk bisnis Anda.',
+        heroImage: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80',
+        heroCardTitle: '4K Studio Capture',
+        heroCardSubtitle: 'Sony Alpha Master Sensor',
+        heroCardBadge: 'Pro',
+        heroFloatingBadge: 'Live Production Ready',
+        svcPhotoTitle: 'Layanan Fotografi Komersial & Personal',
+        svcPhotoDesc: 'Kami menghidupkan visual brand Anda melalui pencahayaan sinematik dan komposisi presisi. Cocok untuk katalog produk, potret wisuda, profil korporat, dokumentasi wedding, dan event.',
+        svcPhotoImg: 'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=800&q=80',
+        svcEditingTitle: 'High-End Retouching & Color Grading',
+        svcEditingDesc: 'Punya materi foto atau video mentah yang butuh sentuhan estetik? Kami menyediakan layanan retouch tekstur kulit alami (Frequency Separation), color grading filmik, dan editing reels/tiktok viral.',
+        svcEditingImg: 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?auto=format&fit=crop&w=800&q=80',
+        svcWebappTitle: 'Pembuatan Aplikasi Web & PWA Custom',
+        svcWebappDesc: 'Bangun sistem bisnis online yang cepat, interaktif, dan tanpa langganan server mahal. Dari sistem kasir (POS), dashboard manajemen stok, portal klien, hingga integrasi database real-time.',
+        svcWebappImg: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
+        priceRates: {
+          photo_studio: 450000,
+          photo_event: 1200000,
+          edit_retouch: 25000,
+          webapp_landing: 750000,
+          webapp_system: 2500000
+        }
+      };
+
+      persistState();
+      populateCustomizerForm();
+      applyContentCustomizer();
+      calculatePrice();
+    };
+
+    // Price Calculator
+    window.calculatePrice = function() {
+      const rates = state.contentCustomizer?.priceRates || {
+        photo_studio: 450000,
+        photo_event: 1200000,
+        edit_retouch: 25000,
+        webapp_landing: 750000,
+        webapp_system: 2500000
+      };
+
+      const service = document.getElementById('calcService').value;
+      const qty = parseInt(document.getElementById('calcQty').value) || 1;
+      const isFast = document.getElementById('calcFast').checked;
+
+      let basePrice = rates.photo_studio;
+      if (service === 'photo_studio') basePrice = rates.photo_studio;
+      if (service === 'photo_event') basePrice = rates.photo_event;
+      if (service === 'edit_retouch') basePrice = rates.edit_retouch;
+      if (service === 'webapp_landing') basePrice = rates.webapp_landing;
+      if (service === 'webapp_system') basePrice = rates.webapp_system;
+
+      let total = basePrice * qty;
+      if (isFast) total = total * 1.25;
+
+      const formatted = new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(total);
+      document.getElementById('calcDisplayTotal').innerText = formatted;
+      return { total, service, formatted };
+    };
+
+    window.useCalculatedBooking = function() {
+      const calcData = calculatePrice();
+      const select = document.getElementById('orderCategory');
+      if (calcData.service.includes('photo')) select.value = 'Fotografi';
+      if (calcData.service.includes('edit')) select.value = 'Editing';
+      if (calcData.service.includes('webapp')) select.value = 'WebApp';
+
+      document.getElementById('orderNotes').value = `Hasil estimasi kalkulator: ${calcData.formatted} (${document.getElementById('calcQty').value} unit). Mohon konfirmasi jadwal & rincian.`;
+      
+      const formEl = document.getElementById('booking');
+      if (formEl) formEl.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // Handle Order Submit (Front-Facing)
+    window.handleOrderSubmit = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('orderClientName').value.trim();
+      const phone = document.getElementById('orderPhone').value.trim();
+      const category = document.getElementById('orderCategory').value;
+      const targetDate = document.getElementById('orderTargetDate').value;
+      const notes = document.getElementById('orderNotes').value.trim();
+
+      const newId = 'LUM-' + Math.floor(1000 + Math.random() * 9000);
+      const newOrder = {
+        id: newId,
+        clientName: name,
+        phone: phone,
+        category: category,
+        targetDate: targetDate,
+        status: 'Menunggu Konfirmasi',
+        notes: notes
+      };
+
+      state.orders.unshift(newOrder);
+      persistState();
+
+      if (!IS_PREVIEW && db) {
+        try {
+          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'orders', newId), newOrder);
+        } catch(err) {
+          console.warn("Gagal simpan ke Firestore:", err);
+        }
+      }
+
+      // Format WhatsApp Message
+      const targetPhoneClean = state.studioSettings.phone.replace(/[^0-9]/g, '');
+      const waText = 
+`*RESERVASI BARU - LUMINA STUDIO* ⚡
+━━━━━━━━━━━━━━━━━━━━
+*ID Booking:* ${newId}
+*Nama Klien:* ${name}
+*No. WhatsApp Klien:* ${phone}
+*Layanan:* ${category}
+*Target Tanggal/Jadwal:* ${targetDate}
+*Catatan Kebutuhan:*
+${notes ? notes : '-'}
+━━━━━━━━━━━━━━━━━━━━
+_Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
+
+      const waUrl = `https://wa.me/${targetPhoneClean}?text=${encodeURIComponent(waText)}`;
+
+      const successBox = document.getElementById('orderSuccessBox');
+      const msg = document.getElementById('orderSuccessMessage');
+      const fallbackBtn = document.getElementById('btnDirectWaFallback');
+      
+      msg.innerHTML = `Terima kasih <strong>${name}</strong>! Kode pesanan: <strong class="text-emerald-700 font-mono">${newId}</strong>. Kami sedang menghubungkan Anda ke WhatsApp resmi studio...`;
+      if (fallbackBtn) fallbackBtn.href = waUrl;
+      successBox.classList.remove('hidden');
+
+      renderAdminOrders();
+      updateDashboardKPIs();
+      document.getElementById('orderForm').reset();
+
+      // Otomatis buka WhatsApp di tab baru
+      window.open(waUrl, '_blank');
+    };
+
+    // Check Order Status
+    window.checkOrderStatus = function() {
+      const input = document.getElementById('trackInput').value.trim().toLowerCase();
+      const resultBox = document.getElementById('trackResult');
+
+      if (!input) {
+        resultBox.innerHTML = `<p class="text-xs text-rose-500 font-semibold">Silakan masukkan Nomor WhatsApp atau Kode ID Pesanan Anda.</p>`;
+        resultBox.classList.remove('hidden');
+        return;
+      }
+
+      const match = state.orders.find(o => 
+        o.id.toLowerCase() === input || 
+        o.phone.toLowerCase().replace(/[^0-9]/g, '') === input.replace(/[^0-9]/g, '')
+      );
+
+      resultBox.classList.remove('hidden');
+      if (match) {
+        resultBox.innerHTML = `
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] font-mono text-slate-400">${match.id}</span>
+              <span class="text-[10px] font-bold px-2.5 py-0.5 rounded-full ${match.status === 'Selesai' ? 'bg-emerald-100 text-emerald-800' : match.status === 'Sedang Dikerjakan' ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-800'}">
+                ${match.status}
+              </span>
+            </div>
+            <h5 class="font-bold text-sm text-slate-900">${match.clientName}</h5>
+            <div class="text-xs text-slate-500">
+              <p><strong>Layanan:</strong> ${match.category}</p>
+              <p><strong>Target Selesai:</strong> ${match.targetDate || '-'}</p>
+              <p class="mt-1"><strong>Catatan:</strong> ${match.notes || 'Tidak ada catatan khusus'}</p>
+            </div>
+            <div class="pt-3 border-t border-slate-100 text-right">
+              <a href="https://wa.me/${state.studioSettings.phone.replace(/[^0-9]/g, '')}?text=Halo%20Admin%20Lumina,%20saya%20ingin%20cek%20pesanan%20${match.id}" target="_blank" class="inline-flex items-center gap-1 text-xs text-emerald-600 font-bold hover:underline">
+                <i class="ph ph-whatsapp-logo"></i>
+                <span>Hubungi Staff Terkait</span>
+              </a>
+            </div>
+          </div>
+        `;
+      } else {
+        resultBox.innerHTML = `
+          <p class="text-xs text-slate-600">Pesanan dengan kata kunci <strong>"${input}"</strong> tidak ditemukan. Pastikan nomor atau ID sudah sesuai saat Anda mengisi formulir.</p>
+        `;
+      }
+    };
+
+    // =========================================================================
+    // ==================== CMS CONTROLLERS & LOGIC ============================
+    // =========================================================================
+
+    const adminModal = document.getElementById('adminModal');
+    const btnOpen = document.getElementById('btnAdminModalOpen');
+    const btnClose = document.getElementById('btnAdminModalClose');
+
+    btnOpen.onclick = () => adminModal.classList.remove('hidden');
+    btnClose.onclick = () => adminModal.classList.add('hidden');
+
+    window.handleAdminLogin = async function(e) {
+      if (e) e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const pass = document.getElementById('adminPassword').value;
+
+      if (!IS_PREVIEW && auth) {
+        try {
+          await signInWithEmailAndPassword(auth, email, pass);
+        } catch(err) {
+          alert("Gagal Login Firebase: " + err.message);
+          return;
+        }
+      }
+
+      state.isAdmin = true;
+      document.getElementById('adminAuthSection').classList.add('hidden');
+      document.getElementById('adminPanelSection').classList.remove('hidden');
+      document.getElementById('adminActiveUser').innerText = email;
+
+      updateDashboardKPIs();
+      renderAdminOrders();
+      renderCmsPortfolio();
+      renderCmsReviews();
+      populateCustomizerForm();
+    };
+
+    window.handleAdminLogout = async function() {
+      if (!IS_PREVIEW && auth) {
+        try { await signOut(auth); } catch(e) {}
+      }
+      state.isAdmin = false;
+      document.getElementById('adminAuthSection').classList.remove('hidden');
+      document.getElementById('adminPanelSection').classList.add('hidden');
+    };
+
+    window.switchCmsTab = function(tabKey) {
+      document.querySelectorAll('.cms-nav-btn').forEach(btn => {
+        btn.classList.remove('active', 'bg-emerald-500/10', 'text-emerald-400', 'border', 'border-emerald-500/20');
+        btn.classList.add('text-slate-400');
+      });
+      document.querySelectorAll('.cms-panel-content').forEach(p => p.classList.add('hidden'));
+
+      const activeBtn = document.getElementById(`cmsTabBtn-${tabKey}`);
+      const activePanel = document.getElementById(`cmsPanel-${tabKey}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'bg-emerald-500/10', 'text-emerald-400', 'border', 'border-emerald-500/20');
+        activeBtn.classList.remove('text-slate-400');
+      }
+      if (activePanel) {
+        activePanel.classList.remove('hidden');
+      }
+
+      if (tabKey === 'dashboard') updateDashboardKPIs();
+      if (tabKey === 'orders') renderAdminOrders();
+      if (tabKey === 'portfolio') renderCmsPortfolio();
+      if (tabKey === 'reviews') renderCmsReviews();
+      if (tabKey === 'customizer') populateCustomizerForm();
+      if (tabKey === 'settings') populateStudioSettingsForm();
+    };
+
+    function updateDashboardKPIs() {
+      const totalOrders = state.orders.length;
+      const pending = state.orders.filter(o => o.status === 'Menunggu Konfirmasi').length;
+      const active = state.orders.filter(o => o.status === 'Sedang Dikerjakan').length;
+      
+      const elTotal = document.getElementById('dashTotalOrders');
+      const elPending = document.getElementById('dashPendingOrders');
+      const elActive = document.getElementById('dashActiveOrders');
+      const elPort = document.getElementById('dashTotalPortfolio');
+      const badge = document.getElementById('cmsBadgePending');
+
+      if (elTotal) elTotal.innerText = totalOrders;
+      if (elPending) elPending.innerText = pending;
+      if (elActive) elActive.innerText = active;
+      if (elPort) elPort.innerText = state.portfolios.length;
+      if (badge) badge.innerText = pending;
+    }
+
+    // CMS: ORDER MANAGEMENT
+    function renderAdminOrders() {
+      const tbody = document.getElementById('adminOrderTableBody');
+      if (!tbody) return;
+
+      const keyword = (document.getElementById('orderSearchFilter')?.value || '').toLowerCase();
+      const filtered = state.orders.filter(o => 
+        o.clientName.toLowerCase().includes(keyword) || 
+        o.id.toLowerCase().includes(keyword) ||
+        o.phone.includes(keyword)
+      );
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-6 text-center text-slate-400">Tidak ada data pesanan yang cocok.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(o => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="p-3.5">
+            <span class="font-bold text-slate-900 block">${o.clientName}</span>
+            <span class="text-[10px] font-mono text-emerald-600 font-bold">${o.id}</span>
+          </td>
+          <td class="p-3.5 font-mono text-slate-600">${o.phone}</td>
+          <td class="p-3.5">
+            <span class="px-2 py-0.5 rounded-md text-[10px] font-semibold ${o.category === 'Fotografi' ? 'bg-blue-50 text-blue-700' : o.category === 'Editing' ? 'bg-amber-50 text-amber-700' : 'bg-purple-50 text-purple-700'}">
+              ${o.category}
+            </span>
+          </td>
+          <td class="p-3.5 text-slate-500">${o.targetDate || '-'}</td>
+          <td class="p-3.5 text-slate-600 max-w-xs truncate" title="${o.notes || ''}">${o.notes || '-'}</td>
+          <td class="p-3.5">
+            <select onchange="updateOrderStatus('${o.id}', this.value)" class="text-[11px] font-medium border rounded-lg px-2.5 py-1 bg-white border-slate-300 focus:outline-none focus:border-emerald-500">
+              <option value="Menunggu Konfirmasi" ${o.status === 'Menunggu Konfirmasi' ? 'selected' : ''}>Menunggu</option>
+              <option value="Sedang Dikerjakan" ${o.status === 'Sedang Dikerjakan' ? 'selected' : ''}>Dikerjakan</option>
+              <option value="Selesai" ${o.status === 'Selesai' ? 'selected' : ''}>Selesai</option>
+            </select>
+          </td>
+          <td class="p-3.5 text-right whitespace-nowrap">
+            <a href="https://wa.me/${o.phone.replace(/[^0-9]/g, '')}?text=Halo%20${encodeURIComponent(o.clientName)},%20kami%20dari%20LuminaStudio%20mengonfirmasi%20pesanan%20${o.id}" target="_blank" class="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 hover:bg-emerald-100 inline-block mr-1" title="Chat WhatsApp">
+              <i class="ph ph-whatsapp-logo text-base"></i>
+            </a>
+            <button onclick="deleteOrder('${o.id}')" class="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 inline-block" title="Hapus Pesanan">
+              <i class="ph ph-trash text-base"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    window.updateOrderStatus = async function(id, newStatus) {
+      const item = state.orders.find(o => o.id === id);
+      if (item) {
+        item.status = newStatus;
+        persistState();
+        updateDashboardKPIs();
+
+        if (!IS_PREVIEW && db) {
+          try {
+            await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'orders', id), item, { merge: true });
+          } catch(err) {
+            console.warn("Gagal update firestore:", err);
+          }
+        }
+      }
+    };
+
+    window.deleteOrder = async function(id) {
+      if (!confirm(`Hapus pesanan ${id}?`)) return;
+      state.orders = state.orders.filter(o => o.id !== id);
+      persistState();
+      renderAdminOrders();
+      updateDashboardKPIs();
+
+      if (!IS_PREVIEW && db) {
+        try {
+          await deleteDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'orders', id));
+        } catch(err) {
+          console.warn("Gagal hapus firestore:", err);
+        }
+      }
+    };
+
+    // CMS: PORTFOLIO MANAGEMENT
+    window.openAddPortfolioModal = function() {
+      document.getElementById('portfolioFormBox').classList.remove('hidden');
+      document.getElementById('portfolioFormTitle').innerText = 'Tambah Portofolio Baru';
+      document.getElementById('portEditId').value = '';
+      document.getElementById('portTitle').value = '';
+      document.getElementById('portCategory').value = 'photo';
+      document.getElementById('portTag').value = '';
+      document.getElementById('portImage').value = '';
+      document.getElementById('portDesc').value = '';
+      document.getElementById('portUploadLabel').innerText = 'Pilih File Foto (JPG/PNG)';
+      updatePortfolioPreview('');
+    };
+
+    window.closePortfolioForm = function() {
+      document.getElementById('portfolioFormBox').classList.add('hidden');
+    };
+
+    window.handleSavePortfolio = async function(e) {
+      e.preventDefault();
+      const editId = document.getElementById('portEditId').value;
+      const title = document.getElementById('portTitle').value.trim();
+      const category = document.getElementById('portCategory').value;
+      const tag = document.getElementById('portTag').value.trim();
+      const image = document.getElementById('portImage').value.trim();
+      const desc = document.getElementById('portDesc').value.trim();
+
+      if (editId) {
+        const item = state.portfolios.find(p => p.id === editId);
+        if (item) {
+          item.title = title;
+          item.category = category;
+          item.tag = tag;
+          item.image = image;
+          item.desc = desc;
+        }
+      } else {
+        const newPort = {
+          id: 'p-' + Date.now(),
+          title,
+          category,
+          tag,
+          image,
+          desc
+        };
+        state.portfolios.unshift(newPort);
+      }
+
+      persistState();
+      renderPortfolios();
+      renderCmsPortfolio();
+      updateDashboardKPIs();
+      closePortfolioForm();
+
+      if (!IS_PREVIEW && db) {
+        try {
+          const targetId = editId || ('p-' + Date.now());
+          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'portfolios', targetId), {
+            id: targetId, title, category, tag, image, desc
+          });
+        } catch(err) {}
+      }
+    };
+
+    window.editPortfolio = function(id) {
+      const item = state.portfolios.find(p => p.id === id);
+      if (!item) return;
+
+      document.getElementById('portfolioFormBox').classList.remove('hidden');
+      document.getElementById('portfolioFormTitle').innerText = 'Sunting Portofolio';
+      document.getElementById('portEditId').value = item.id;
+      document.getElementById('portTitle').value = item.title;
+      document.getElementById('portCategory').value = item.category;
+      document.getElementById('portTag').value = item.tag;
+      document.getElementById('portImage').value = item.image;
+      document.getElementById('portDesc').value = item.desc;
+      document.getElementById('portUploadLabel').innerText = 'Ganti File Foto';
+      updatePortfolioPreview(item.image);
+    };
+
+    window.deletePortfolio = async function(id) {
+      if (!confirm('Hapus item portofolio ini?')) return;
+      state.portfolios = state.portfolios.filter(p => p.id !== id);
+      persistState();
+      renderPortfolios();
+      renderCmsPortfolio();
+      updateDashboardKPIs();
+
+      if (!IS_PREVIEW && db) {
+        try {
+          await deleteDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'portfolios', id));
+        } catch(err) {}
+      }
+    };
+
+    function renderCmsPortfolio() {
+      const tbody = document.getElementById('cmsPortfolioTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = state.portfolios.map(p => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="p-3.5">
+            <img src="${p.image}" class="w-14 h-10 object-cover rounded-lg border border-slate-200">
+          </td>
+          <td class="p-3.5 font-bold text-slate-900">${p.title}</td>
+          <td class="p-3.5">
+            <span class="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-700">${p.category}</span>
+            <span class="text-[10px] text-slate-400 ml-1">(${p.tag})</span>
+          </td>
+          <td class="p-3.5 text-slate-500 max-w-xs truncate">${p.desc}</td>
+          <td class="p-3.5 text-right whitespace-nowrap">
+            <button onclick="editPortfolio('${p.id}')" class="p-1.5 rounded-lg bg-blue-50 text-blue-600 hover:bg-blue-100 inline-block mr-1">
+              <i class="ph ph-pencil-simple text-base"></i>
+            </button>
+            <button onclick="deletePortfolio('${p.id}')" class="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100 inline-block">
+              <i class="ph ph-trash text-base"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // CMS: REVIEWS MANAGEMENT
+    window.openAddReviewModal = function() {
+      document.getElementById('reviewFormBox').classList.remove('hidden');
+      document.getElementById('revName').value = '';
+      document.getElementById('revRole').value = '';
+      document.getElementById('revRating').value = '5';
+      document.getElementById('revText').value = '';
+    };
+
+    window.closeReviewForm = function() {
+      document.getElementById('reviewFormBox').classList.add('hidden');
+    };
+
+    window.handleSaveReview = async function(e) {
+      e.preventDefault();
+      const name = document.getElementById('revName').value.trim();
+      const role = document.getElementById('revRole').value.trim();
+      const rating = parseInt(document.getElementById('revRating').value) || 5;
+      const text = document.getElementById('revText').value.trim();
+
+      const newId = 'r-' + Date.now();
+      const newRev = { id: newId, name, role, rating, text };
+      state.reviews.unshift(newRev);
+
+      persistState();
+      renderReviews();
+      renderCmsReviews();
+      closeReviewForm();
+
+      if (!IS_PREVIEW && db) {
+        try {
+          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'reviews', newId), newRev);
+        } catch(err) {}
+      }
+    };
+
+    window.deleteReview = async function(id) {
+      if (!confirm('Hapus testimoni ini?')) return;
+      state.reviews = state.reviews.filter(r => r.id !== id);
+      persistState();
+      renderReviews();
+      renderCmsReviews();
+
+      if (!IS_PREVIEW && db) {
+        try {
+          await deleteDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'reviews', id));
+        } catch(err) {}
+      }
+    };
+
+    function renderCmsReviews() {
+      const tbody = document.getElementById('cmsReviewsTableBody');
+      if (!tbody) return;
+
+      tbody.innerHTML = state.reviews.map(r => `
+        <tr class="hover:bg-slate-50 transition">
+          <td class="p-3.5 font-bold text-slate-900">${r.name}</td>
+          <td class="p-3.5 text-slate-500">${r.role}</td>
+          <td class="p-3.5 text-amber-500">
+            ${Array(Number(r.rating) || 5).fill('★').join('')}
+          </td>
+          <td class="p-3.5 text-slate-600 max-w-sm truncate">"${r.text}"</td>
+          <td class="p-3.5 text-right">
+            <button onclick="deleteReview('${r.id}')" class="p-1.5 rounded-lg bg-rose-50 text-rose-600 hover:bg-rose-100">
+              <i class="ph ph-trash text-base"></i>
+            </button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // CMS: STUDIO SETTINGS
+    window.handleSaveStudioSettings = function(e) {
+      e.preventDefault();
+      const phone = document.getElementById('settingStudioPhone').value.trim();
+      const email = document.getElementById('settingStudioEmail').value.trim();
+      const address = document.getElementById('settingStudioAddress').value.trim();
+
+      state.studioSettings = { phone, email, address };
+      persistState();
+      updateFooterDisplay();
+
+      const notice = document.getElementById('settingSaveNotice');
+      notice.classList.remove('hidden');
+      setTimeout(() => notice.classList.add('hidden'), 2500);
+    };
+
+    // Initialize on window load
+    window.addEventListener('DOMContentLoaded', () => {
+      applyContentCustomizer();
+      renderPortfolios();
+      renderReviews();
+      calculatePrice();
+      updateFooterDisplay();
+      populateStudioSettingsForm();
+      window.autoSetupDatabase();
+      runTypewriter();
+      setupScrollReveal();
+    });
+  </script>
+</body>
+</html>
