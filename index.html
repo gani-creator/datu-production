@@ -1536,20 +1536,52 @@
 
   <!-- ==================== JAVASCRIPT & FIREBASE LOGIC ==================== -->
   <script type="module">
-    // KONFIGURASI APLIKASI
-    const IS_PREVIEW = true; // Set false jika sudah terhubung ke Firebase Console
+    // KONFIGURASI FIREBASE LIVE (datu-production)
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithEmailAndPassword, 
+      signOut, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { 
+      getFirestore, 
+      collection, 
+      doc, 
+      setDoc, 
+      getDoc, 
+      getDocs, 
+      deleteDoc, 
+      onSnapshot,
+      query,
+      orderBy
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+
+    const IS_PREVIEW = false; // Mode Firebase Aktif Terhubung ke Cloud
+    const APP_ID = "datu-production";
     const firebaseConfig = {
       apiKey: "AIzaSyBcH7q2HoF0BSLPeujWI8c21388_vryiuw",
-  authDomain: "datu-production.firebaseapp.com",
-  projectId: "datu-production",
-  storageBucket: "datu-production.firebasestorage.app",
-  messagingSenderId: "801989565358",
-  appId: "1:801989565358:web:d98ef93a7f5a3757e9463f",
-  measurementId: "G-9D0WLM7ZPT"
+      authDomain: "datu-production.firebaseapp.com",
+      projectId: "datu-production",
+      storageBucket: "datu-production.firebasestorage.app",
+      messagingSenderId: "801989565358",
+      appId: "1:801989565358:web:d98ef93a7f5a3757e9463f",
+      measurementId: "G-9D0WLM7ZPT"
     };
 
+    // Inisialisasi Firebase & Layanan Cloud
+    let app = null;
     let auth = null;
     let db = null;
+
+    try {
+      app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      db = getFirestore(app);
+      console.log("Firebase datu-production berhasil diinisialisasi.");
+    } catch (err) {
+      console.error("Gagal menghubungkan Firebase:", err.message);
+    }
 
     // ==================== ANIMATION CONTROLLERS ====================
     // 1. Headline Typewriter Effect
@@ -1947,94 +1979,156 @@
     }
 
     function updateFooterDisplay() {
-      const p = document.getElementById('footerStudioPhone');
-      const e = document.getElementById('footerStudioEmail');
-      const a = document.getElementById('footerStudioAddress');
-      if (p) p.innerText = state.studioSettings.phone;
-      if (e) e.innerText = state.studioSettings.email;
-      if (a) a.innerText = state.studioSettings.address;
-      updateBrandingUI();
-    }
-
-    // Update Brand Name, Tagline & Logo across Navbar, Footer, and CMS
-    function updateBrandingUI() {
       const st = state.studioSettings;
       if (!st) return;
 
-      const studioName = st.name || 'LuminaStudio';
-      const tagline = st.tagline || 'Creative & Tech Agency';
-      const logoUrl = st.logo || '';
-      const aboutText = st.about || 'Studio kreatif terpadu yang memadukan fotografi beresolusi tinggi, retouching sinematik, dan rekayasa webapps serverless modern.';
-
-      // Update Page Title
-      document.title = `${studioName} - Fotografi, Editing & Pembuatan WebApp`;
-
-      // Helper to format name with accent color on the second word
-      function formatBrandHTML(nameStr) {
-        const words = nameStr.trim().split(' ');
-        if (words.length > 1) {
-          const first = words[0];
-          const rest = words.slice(1).join(' ');
-          return `${first} <span class="text-emerald-400">${rest}</span>`;
-        }
-        if (nameStr.length > 6) {
-          const part1 = nameStr.slice(0, 6);
-          const part2 = nameStr.slice(6);
-          return `${part1}<span class="text-emerald-400">${part2}</span>`;
-        }
-        return `${nameStr}`;
-      }
-
-      // Update Navbar Branding
+      // Brand Title Elements
       const navTitle = document.getElementById('navBrandTitle');
-      const navTag = document.getElementById('navBrandTagline');
-      const navLogoImg = document.getElementById('navBrandLogoImg');
-      const navLogoEmoji = document.getElementById('navBrandLogoEmoji');
-      if (navTitle) navTitle.innerHTML = formatBrandHTML(studioName);
-      if (navTag) navTag.innerText = tagline;
-      if (navLogoImg && navLogoEmoji) {
-        if (logoUrl) {
-          navLogoImg.src = logoUrl;
-          navLogoImg.classList.remove('hidden');
-          navLogoEmoji.classList.add('hidden');
-        } else {
-          navLogoImg.classList.add('hidden');
-          navLogoEmoji.classList.remove('hidden');
-        }
-      }
-
-      // Update Footer Branding
-      const footTitle = document.getElementById('footerBrandTitle');
-      const footAbout = document.getElementById('footerBrandAbout');
-      const footLogoImg = document.getElementById('footerBrandLogoImg');
-      const footLogoEmoji = document.getElementById('footerBrandLogoEmoji');
-      if (footTitle) footTitle.innerHTML = formatBrandHTML(studioName);
-      if (footAbout) footAbout.innerText = aboutText;
-      if (footLogoImg && footLogoEmoji) {
-        if (logoUrl) {
-          footLogoImg.src = logoUrl;
-          footLogoImg.classList.remove('hidden');
-          footLogoEmoji.classList.add('hidden');
-        } else {
-          footLogoImg.classList.add('hidden');
-          footLogoEmoji.classList.remove('hidden');
-        }
-      }
-
-      // Update CMS Header Branding
+      const footerTitle = document.getElementById('footerBrandTitle');
       const cmsTitle = document.getElementById('cmsBrandTitle');
-      const cmsLogoImg = document.getElementById('cmsBrandLogoImg');
-      const cmsLogoEmoji = document.getElementById('cmsBrandLogoEmoji');
-      if (cmsTitle) cmsTitle.innerText = `${studioName} CMS`;
-      if (cmsLogoImg && cmsLogoEmoji) {
-        if (logoUrl) {
-          cmsLogoImg.src = logoUrl;
-          cmsLogoImg.classList.remove('hidden');
-          cmsLogoEmoji.classList.add('hidden');
+
+      const formattedName = `<span class="text-white">${st.name.replace(/Studio/i, '')}</span><span class="text-emerald-400">Studio</span>`;
+      if (navTitle) navTitle.innerHTML = formattedName;
+      if (footerTitle) footerTitle.innerHTML = formattedName;
+      if (cmsTitle) cmsTitle.innerText = st.name + ' CMS';
+
+      // Tagline & About
+      const navTagline = document.getElementById('navBrandTagline');
+      const footerAbout = document.getElementById('footerBrandAbout');
+      if (navTagline) navTagline.innerText = st.tagline || 'Creative & Tech Agency';
+      if (footerAbout) footerAbout.innerText = st.about || '';
+
+      // Contact Info
+      const elPhone = document.getElementById('footerStudioPhone');
+      const elEmail = document.getElementById('footerStudioEmail');
+      const elAddr = document.getElementById('footerStudioAddress');
+      if (elPhone) elPhone.innerText = st.phone || '+62 812-3456-7890';
+      if (elEmail) elEmail.innerText = st.email || 'halo@luminastudio.id';
+      if (elAddr) elAddr.innerText = st.address || 'Jl. Raya Studio Kreatif No. 88, Surabaya, Jawa Timur';
+
+      // Logo Render (Navbar, Footer, CMS Header)
+      const renderLogoTo = (containerId, imgId, emojiId) => {
+        const c = document.getElementById(containerId);
+        const img = document.getElementById(imgId);
+        const em = document.getElementById(emojiId);
+        if (!c || !img || !em) return;
+
+        if (st.logo) {
+          img.src = st.logo;
+          img.classList.remove('hidden');
+          em.classList.add('hidden');
+          c.classList.remove('bg-gradient-to-tr', 'from-emerald-500', 'to-teal-300', 'bg-emerald-500');
+          c.classList.add('bg-slate-900');
         } else {
-          cmsLogoImg.classList.add('hidden');
-          cmsLogoEmoji.classList.remove('hidden');
+          img.classList.add('hidden');
+          em.classList.remove('hidden');
+          c.classList.add('bg-gradient-to-tr', 'from-emerald-500', 'to-teal-300');
+          c.classList.remove('bg-slate-900');
         }
+      };
+
+      renderLogoTo('navBrandLogoContainer', 'navBrandLogoImg', 'navBrandLogoEmoji');
+      renderLogoTo('footerBrandLogoContainer', 'footerBrandLogoImg', 'footerBrandLogoEmoji');
+      renderLogoTo('cmsBrandLogoContainer', 'cmsBrandLogoImg', 'cmsBrandLogoEmoji');
+
+      // Update document title
+      document.title = `${st.name} & Tech - Fotografi, Editing & Pembuatan WebApp`;
+    }
+
+    // Auto Setup: Injeksi data awal ke Firebase Firestore jika koleksi masih kosong
+    window.autoSetupDatabase = async function() {
+      if (!db) return;
+      try {
+        const ordersCol = collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders');
+        const snap = await getDocs(ordersCol);
+        if (snap.empty) {
+          console.log("Koleksi orders masih kosong. Menyuntikkan data inisial ke Firestore...");
+          for (const item of state.orders) {
+            await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'orders', item.id), item);
+          }
+          for (const item of state.portfolios) {
+            await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'portfolios', item.id), item);
+          }
+          for (const item of state.reviews) {
+            await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'reviews', item.id), item);
+          }
+          await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'settings', 'studioProfile'), state.studioSettings);
+          await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'settings', 'customizer'), state.contentCustomizer);
+          console.log("Setup otomatis database Firestore selesai!");
+        }
+      } catch (err) {
+        console.info("Info Firebase Setup:", err.message);
+      }
+    };
+
+    // Listener Real-Time dari Firestore Cloud
+    function setupRealtimeListeners() {
+      if (!db) return;
+
+      try {
+        // Listener Orders
+        const ordersCol = collection(db, 'artifacts', APP_ID, 'public', 'data', 'orders');
+        onSnapshot(ordersCol, (snapshot) => {
+          if (!snapshot.empty) {
+            const list = [];
+            snapshot.forEach(docSnap => list.push(docSnap.data()));
+            state.orders = list;
+            persistState();
+            renderAdminOrders();
+            updateDashboardKPIs();
+          }
+        }, (err) => console.warn("Order snapshot listener:", err.message));
+
+        // Listener Portfolios
+        const portCol = collection(db, 'artifacts', APP_ID, 'public', 'data', 'portfolios');
+        onSnapshot(portCol, (snapshot) => {
+          if (!snapshot.empty) {
+            const list = [];
+            snapshot.forEach(docSnap => list.push(docSnap.data()));
+            state.portfolios = list;
+            persistState();
+            renderPortfolios();
+            renderCmsPortfolio();
+            updateDashboardKPIs();
+          }
+        }, (err) => console.warn("Portfolio snapshot listener:", err.message));
+
+        // Listener Reviews
+        const revCol = collection(db, 'artifacts', APP_ID, 'public', 'data', 'reviews');
+        onSnapshot(revCol, (snapshot) => {
+          if (!snapshot.empty) {
+            const list = [];
+            snapshot.forEach(docSnap => list.push(docSnap.data()));
+            state.reviews = list;
+            persistState();
+            renderReviews();
+            renderCmsReviews();
+          }
+        }, (err) => console.warn("Review snapshot listener:", err.message));
+
+        // Listener Studio Profile
+        const profRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'settings', 'studioProfile');
+        onSnapshot(profRef, (docSnap) => {
+          if (docSnap.exists()) {
+            state.studioSettings = { ...state.studioSettings, ...docSnap.data() };
+            persistState();
+            updateFooterDisplay();
+          }
+        }, (err) => console.warn("Profile snapshot listener:", err.message));
+
+        // Listener Customizer
+        const custRef = doc(db, 'artifacts', APP_ID, 'public', 'data', 'settings', 'customizer');
+        onSnapshot(custRef, (docSnap) => {
+          if (docSnap.exists()) {
+            state.contentCustomizer = { ...state.contentCustomizer, ...docSnap.data() };
+            persistState();
+            applyContentCustomizer();
+            calculatePrice();
+          }
+        }, (err) => console.warn("Customizer snapshot listener:", err.message));
+
+      } catch (err) {
+        console.warn("Gagal inisialisasi listener real-time:", err.message);
       }
     }
     // Handle Studio Logo Upload in CMS Settings
@@ -2136,9 +2230,9 @@
         setTimeout(() => notice.classList.add('hidden'), 3000);
       }
 
-      if (!IS_PREVIEW && db) {
+      if (db) {
         try {
-          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'settings', 'studioProfile'), state.studioSettings);
+          await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'settings', 'studioProfile'), state.studioSettings);
         } catch(err) {
           console.warn("Gagal simpan profil studio ke Firestore:", err);
         }
@@ -2405,9 +2499,9 @@
         setTimeout(() => notice.classList.add('hidden'), 3000);
       }
 
-      if (!IS_PREVIEW && db) {
+      if (db) {
         try {
-          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'settings', 'customizer'), state.contentCustomizer);
+          await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'settings', 'customizer'), state.contentCustomizer);
         } catch(err) {
           console.warn("Gagal simpan customizer ke Firestore:", err);
         }
@@ -2513,17 +2607,18 @@
         category: category,
         targetDate: targetDate,
         status: 'Menunggu Konfirmasi',
-        notes: notes
+        notes: notes,
+        createdAt: new Date().toISOString()
       };
 
       state.orders.unshift(newOrder);
       persistState();
 
-      if (!IS_PREVIEW && db) {
+      if (db) {
         try {
-          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'orders', newId), newOrder);
+          await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'orders', newId), newOrder);
         } catch(err) {
-          console.warn("Gagal simpan ke Firestore:", err);
+          console.warn("Gagal simpan pesanan ke Firestore:", err);
         }
       }
 
@@ -2561,7 +2656,7 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
     };
 
     // Check Order Status
-    window.checkOrderStatus = function() {
+    window.checkOrderStatus = async function() {
       const input = document.getElementById('trackInput').value.trim().toLowerCase();
       const resultBox = document.getElementById('trackResult');
 
@@ -2571,10 +2666,20 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
         return;
       }
 
-      const match = state.orders.find(o => 
+      let match = state.orders.find(o => 
         o.id.toLowerCase() === input || 
         o.phone.toLowerCase().replace(/[^0-9]/g, '') === input.replace(/[^0-9]/g, '')
       );
+
+      // Jika belum ditemukan di state lokal, cek langsung ke Firestore
+      if (!match && db) {
+        try {
+          const docSnap = await getDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'orders', input.toUpperCase()));
+          if (docSnap.exists()) {
+            match = docSnap.data();
+          }
+        } catch (err) {}
+      }
 
       resultBox.classList.remove('hidden');
       if (match) {
@@ -2623,11 +2728,13 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
       const email = document.getElementById('adminEmail').value.trim();
       const pass = document.getElementById('adminPassword').value;
 
-      if (!IS_PREVIEW && auth) {
+      if (auth) {
         try {
           await signInWithEmailAndPassword(auth, email, pass);
         } catch(err) {
-          alert("Gagal Login Firebase: " + err.message);
+          console.warn("Info Firebase Auth:", err.message);
+          // Jika akun belum dibuat di console Firebase Auth, beri tahu pengguna
+          alert("Gagal Login Firebase Auth: " + err.message + "\n\nPastikan Anda telah mengaktifkan Email/Password Provider di konsol Firebase Auth dan membuat akun admin tersebut.");
           return;
         }
       }
@@ -2645,13 +2752,33 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
     };
 
     window.handleAdminLogout = async function() {
-      if (!IS_PREVIEW && auth) {
+      if (auth) {
         try { await signOut(auth); } catch(e) {}
       }
       state.isAdmin = false;
       document.getElementById('adminAuthSection').classList.remove('hidden');
       document.getElementById('adminPanelSection').classList.add('hidden');
     };
+
+    // Firebase Auth State Observer
+    if (auth) {
+      onAuthStateChanged(auth, (user) => {
+        if (user) {
+          state.isAdmin = true;
+          document.getElementById('adminAuthSection')?.classList.add('hidden');
+          document.getElementById('adminPanelSection')?.classList.remove('hidden');
+          const elUser = document.getElementById('adminActiveUser');
+          if (elUser) elUser.innerText = user.email || 'Admin';
+          updateDashboardKPIs();
+          renderAdminOrders();
+          renderCmsPortfolio();
+          renderCmsReviews();
+          populateCustomizerForm();
+        } else {
+          state.isAdmin = false;
+        }
+      });
+    }
 
     window.switchCmsTab = function(tabKey) {
       document.querySelectorAll('.cms-nav-btn').forEach(btn => {
@@ -2753,9 +2880,9 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
         persistState();
         updateDashboardKPIs();
 
-        if (!IS_PREVIEW && db) {
+        if (db) {
           try {
-            await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'orders', id), item, { merge: true });
+            await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'orders', id), item, { merge: true });
           } catch(err) {
             console.warn("Gagal update firestore:", err);
           }
@@ -2770,9 +2897,9 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
       renderAdminOrders();
       updateDashboardKPIs();
 
-      if (!IS_PREVIEW && db) {
+      if (db) {
         try {
-          await deleteDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'orders', id));
+          await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'orders', id));
         } catch(err) {
           console.warn("Gagal hapus firestore:", err);
         }
@@ -2833,12 +2960,29 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
       updateDashboardKPIs();
       closePortfolioForm();
 
-      if (!IS_PREVIEW && db) {
+      if (db) {
         try {
           const targetId = editId || ('p-' + Date.now());
-          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'portfolios', targetId), {
+          await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'portfolios', targetId), {
             id: targetId, title, category, tag, image, desc
           });
+        } catch(err) {
+          console.warn("Gagal simpan portofolio ke firestore:", err);
+        }
+      }
+    };
+
+    window.deletePortfolio = async function(id) {
+      if (!confirm('Hapus item portofolio ini?')) return;
+      state.portfolios = state.portfolios.filter(p => p.id !== id);
+      persistState();
+      renderPortfolios();
+      renderCmsPortfolio();
+      updateDashboardKPIs();
+
+      if (db) {
+        try {
+          await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'portfolios', id));
         } catch(err) {}
       }
     };
@@ -2857,21 +3001,6 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
       document.getElementById('portDesc').value = item.desc;
       document.getElementById('portUploadLabel').innerText = 'Ganti File Foto';
       updatePortfolioPreview(item.image);
-    };
-
-    window.deletePortfolio = async function(id) {
-      if (!confirm('Hapus item portofolio ini?')) return;
-      state.portfolios = state.portfolios.filter(p => p.id !== id);
-      persistState();
-      renderPortfolios();
-      renderCmsPortfolio();
-      updateDashboardKPIs();
-
-      if (!IS_PREVIEW && db) {
-        try {
-          await deleteDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'portfolios', id));
-        } catch(err) {}
-      }
     };
 
     function renderCmsPortfolio() {
@@ -2930,9 +3059,9 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
       renderCmsReviews();
       closeReviewForm();
 
-      if (!IS_PREVIEW && db) {
+      if (db) {
         try {
-          await setDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'reviews', newId), newRev);
+          await setDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'reviews', newId), newRev);
         } catch(err) {}
       }
     };
@@ -2944,9 +3073,9 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
       renderReviews();
       renderCmsReviews();
 
-      if (!IS_PREVIEW && db) {
+      if (db) {
         try {
-          await deleteDoc(doc(db, 'artifacts', 'lumina-app', 'public', 'data', 'reviews', id));
+          await deleteDoc(doc(db, 'artifacts', APP_ID, 'public', 'data', 'reviews', id));
         } catch(err) {}
       }
     };
@@ -2972,22 +3101,6 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
       `).join('');
     }
 
-    // CMS: STUDIO SETTINGS
-    window.handleSaveStudioSettings = function(e) {
-      e.preventDefault();
-      const phone = document.getElementById('settingStudioPhone').value.trim();
-      const email = document.getElementById('settingStudioEmail').value.trim();
-      const address = document.getElementById('settingStudioAddress').value.trim();
-
-      state.studioSettings = { phone, email, address };
-      persistState();
-      updateFooterDisplay();
-
-      const notice = document.getElementById('settingSaveNotice');
-      notice.classList.remove('hidden');
-      setTimeout(() => notice.classList.add('hidden'), 2500);
-    };
-
     // Initialize on window load
     window.addEventListener('DOMContentLoaded', () => {
       applyContentCustomizer();
@@ -2997,6 +3110,7 @@ _Pesan ini dikirim otomatis via Formulir Booking LuminaStudio WebApp._`;
       updateFooterDisplay();
       populateStudioSettingsForm();
       window.autoSetupDatabase();
+      setupRealtimeListeners();
       runTypewriter();
       setupScrollReveal();
     });
